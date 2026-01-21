@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ResumeData, THEMES, ThemeId, LAYOUTS, LayoutId, FONT_OPTIONS, FontId } from '../types';
 import { Plus, Trash2, User, Briefcase, GraduationCap, Code, FileText, Palette, Check, Camera, Layout, Type } from 'lucide-react';
 
@@ -21,6 +21,13 @@ interface Props {
 }
 
 const ResumeForm: React.FC<Props> = ({ data, onChange, tutorial }) => {
+  const [aiModalOpen, setAiModalOpen] = useState(false);
+  const [aiApiKey, setAiApiKey] = useState(() => localStorage.getItem('hf_api_key') || '');
+  const [aiModel, setAiModel] = useState(() => localStorage.getItem('hf_model') || 'mistralai/Mistral-7B-Instruct-v0.2');
+  const [aiJobDescription, setAiJobDescription] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState('');
+
     const renderTutorialBlock = (key: string) => {
       if (!tutorial || tutorial.activeKey !== key) return null;
       return (
@@ -64,6 +71,92 @@ const ResumeForm: React.FC<Props> = ({ data, onChange, tutorial }) => {
         updatePersonalInfo('photo', reader.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const buildResumeSnapshot = () => {
+    const experienceText = data.experiences
+      .map((exp) => `${exp.period} – ${exp.position} (${exp.company}): ${exp.description}`)
+      .join('\n');
+    const educationText = data.education
+      .map((edu) => `${edu.period} – ${edu.degree} (${edu.school})`)
+      .join('\n');
+    const skillsText = data.skills.map((s) => `${s.name} (${s.level}/5)`).join(', ');
+    const strengthsText = (data.strengths || []).join(', ');
+    const additionalSkillsText = (data.additionalSkills || []).map((s) => s.name).join(', ');
+
+    return `Name: ${data.personalInfo.fullName}
+Zielposition: ${data.personalInfo.jobTitle}
+Kurzprofil: ${data.personalInfo.summary}
+
+Berufserfahrung:
+${experienceText}
+
+Ausbildung:
+${educationText}
+
+Fähigkeiten: ${skillsText}
+Stärken: ${strengthsText}
+Zusatzkenntnisse: ${additionalSkillsText}`;
+  };
+
+  const handleGenerateCoverLetter = async () => {
+    setAiError('');
+    if (!aiApiKey.trim()) {
+      setAiError('Bitte deinen Hugging Face Token eingeben.');
+      return;
+    }
+    if (!aiJobDescription.trim()) {
+      setAiError('Bitte die Stellenbeschreibung einfügen.');
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const prompt = `Erstelle ein Motivationsschreiben auf Deutsch. Nutze ausschließlich die folgenden Informationen und die Stellenbeschreibung. Gib NUR den reinen Text des Anschreibens zurück, ohne Einleitung oder Erklärung, ohne Überschrift wie "Hier ist...".
+
+Lebenslaufdaten:
+${buildResumeSnapshot()}
+
+Stellenbeschreibung:
+${aiJobDescription}`;
+
+      const response = await fetch(
+        `https://api-inference.huggingface.co/models/${aiModel.trim()}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${aiApiKey.trim()}`
+          },
+          body: JSON.stringify({
+            inputs: prompt,
+            parameters: { temperature: 0.4, max_new_tokens: 800, return_full_text: false }
+          })
+        }
+      );
+
+      const payload = await response.json();
+      if (!response.ok) {
+        const apiMessage = payload?.error?.message || payload?.message || 'Unbekannter Fehler.';
+        throw new Error(`KI‑Anfrage fehlgeschlagen (${response.status}). ${apiMessage}`);
+      }
+
+      const text = Array.isArray(payload)
+        ? String(payload?.[0]?.generated_text || '').trim()
+        : String(payload?.generated_text || payload?.text || '').trim();
+
+      if (!text) {
+        throw new Error('Keine Antwort von der KI erhalten.');
+      }
+
+      updateCoverLetter('text', text);
+      setAiModalOpen(false);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unbekannter Fehler.';
+      setAiError(message.includes('Failed to fetch') ? 'CORS blockiert die Anfrage im Browser.' : message);
+    } finally {
+      setAiLoading(false);
     }
   };
 
@@ -360,6 +453,16 @@ const ResumeForm: React.FC<Props> = ({ data, onChange, tutorial }) => {
           <FileText className="text-blue-600" size={20} />
           <h2 className="text-lg font-bold">Anschreiben</h2>
         </div>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-slate-500">Erst Lebenslauf ausfüllen, dann Stellenbeschreibung einfügen.</p>
+          <button
+            type="button"
+            onClick={() => setAiModalOpen(true)}
+            className="px-3 py-2 rounded-lg text-xs font-bold bg-slate-900 text-white hover:bg-slate-800"
+          >
+            Mit KI generieren
+          </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase">Datum</label>
@@ -403,6 +506,83 @@ const ResumeForm: React.FC<Props> = ({ data, onChange, tutorial }) => {
             </div>
         </div>
       </section>
+
+      {aiModalOpen && (
+        <div className="fixed inset-0 z-[120] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full p-6 space-y-4">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">KI‑Anschreiben</p>
+                <h2 className="text-xl font-black text-slate-900 mt-1">Hugging Face Token</h2>
+              </div>
+              <button
+                onClick={() => setAiModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 text-sm"
+                aria-label="Dialog schließen"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="text-sm text-slate-600 space-y-2">
+              <p>Die App nutzt deinen eigenen Hugging Face Token direkt im Browser.</p>
+              <p>Kein Backend, keine Serverkosten. Token wird lokal gespeichert.</p>
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase">Hugging Face Token</label>
+              <input
+                type="password"
+                value={aiApiKey}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setAiApiKey(value);
+                  localStorage.setItem('hf_api_key', value);
+                }}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                placeholder="hf_..."
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase">Modell</label>
+              <input
+                type="text"
+                value={aiModel}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setAiModel(value);
+                  localStorage.setItem('hf_model', value);
+                }}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                placeholder="mistralai/Mistral-7B-Instruct-v0.2"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase">Stellenbeschreibung</label>
+              <textarea
+                rows={8}
+                value={aiJobDescription}
+                onChange={(e) => setAiJobDescription(e.target.value)}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"
+              />
+            </div>
+            {aiError && <p className="text-xs text-red-600">{aiError}</p>}
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setAiModalOpen(false)}
+                className="text-xs font-bold text-slate-500 hover:text-slate-700"
+              >
+                Abbrechen
+              </button>
+              <button
+                onClick={handleGenerateCoverLetter}
+                disabled={aiLoading}
+                className="px-3 py-2 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+              >
+                {aiLoading ? 'Generiere…' : 'Text generieren'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Experience */}
       <section className={`space-y-4 ${tutorial?.activeKey && tutorial.activeKey !== 'experiences' ? 'tutorial-dim' : ''}`} data-tour="experiencesSection">
