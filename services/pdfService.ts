@@ -79,9 +79,25 @@ export const generatePDF = async (elements: HTMLElement[], filename: string = 'l
               applyUppercaseWorkaround(target, clonedDoc);
               const images = target.querySelectorAll('img');
               images.forEach((img) => {
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'contain';
+                const isPhoto = img.closest('.cv-photo');
+                if (isPhoto) {
+                  const parent = img.parentElement as HTMLElement | null;
+                  if (parent) {
+                    parent.style.backgroundImage = `url("${img.src}")`;
+                    parent.style.backgroundSize = 'cover';
+                    parent.style.backgroundPosition = 'center';
+                    parent.style.backgroundRepeat = 'no-repeat';
+                  }
+                  img.style.width = '100%';
+                  img.style.height = '100%';
+                  img.style.objectFit = 'cover';
+                  img.style.opacity = '0';
+                } else {
+                  img.style.width = '100%';
+                  img.style.height = 'auto';
+                  img.style.objectFit = 'contain';
+                }
+                img.style.maxHeight = '100%';
                 img.style.objectPosition = 'center';
                 img.style.backgroundColor = '#ffffff';
                 img.style.display = 'block';
@@ -91,8 +107,8 @@ export const generatePDF = async (elements: HTMLElement[], filename: string = 'l
                 (page as HTMLElement).style.transform = 'none';
                 (page as HTMLElement).style.boxShadow = 'none';
                 (page as HTMLElement).style.margin = '0';
-                (page as HTMLElement).style.width = '210mm';
-                (page as HTMLElement).style.height = '297mm';
+                (page as HTMLElement).style.width = `${captureWidth}px`;
+                (page as HTMLElement).style.height = `${captureHeight}px`;
               });
               const cvPages = target.querySelectorAll('.cv-page');
               cvPages.forEach((page) => {
