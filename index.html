@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Master - Lebenslauf Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@400;700;900&family=Roboto+Serif:opsz,wght@8..144,400;8..144,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+        .font-roboto-serif { font-family: 'Roboto Serif', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .tour-active {
+            position: relative;
+            z-index: 101;
+        }
+        .tutorial-active .tour-active {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+            padding: 8px;
+        }
+        .tutorial-inline {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .tutorial-step {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #94a3b8;
+        }
+        .tutorial-title {
+            font-size: 16px;
+            font-weight: 900;
+            margin-top: 4px;
+            color: #0f172a;
+        }
+        .tutorial-body {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #475569;
+        }
+        .tutorial-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            margin-top: auto;
+        }
+        .tutorial-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .tutorial-skip {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+        }
+        .tutorial-back {
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+        }
+        .tutorial-back:disabled {
+            opacity: 0.5;
+        }
+        .tutorial-next {
+            padding: 6px 10px;
+            border-radius: 10px;
+            background: #2563eb;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .tutorial-dim {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            padding: 0;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .cv-page {
+            height: auto;
+            min-height: 297mm;
+            overflow: visible;
+        }
+        .cv-photo,
+        .cv-photo img {
+            width: 100%;
+            height: 100%;
+        }
+        .cv-photo img {
+            display: block;
+            object-fit: cover;
+            object-position: center;
+        }
+        @media print {
+            .no-print { display: none; }
+            .a4-page { box-shadow: none; margin: 0; }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "html2canvas": "https://esm.sh/html2canvas@^1.4.1",
+    "jspdf": "https://esm.sh/jspdf@^2.5.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
