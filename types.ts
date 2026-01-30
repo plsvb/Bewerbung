@@ -126,10 +126,191 @@ export interface ResumeData {
   languages: LanguageSkill[];
   strengths: string[];
   additionalSkills: AdditionalSkill[];
+  customColors?: {
+    primary: string;
+    secondary: string;
+  };
 }
 
-// Added missing properties to INITIAL_DATA to match ResumeData interface
+export interface SavedVersion {
+  id: string;
+  name: string;
+  timestamp: number;
+  data: ResumeData;
+}
+
+// Empty initial data for clean start
 export const INITIAL_DATA: ResumeData = {
+  selectedThemeId: 'pro_navy',
+  selectedLayoutId: 'modern',
+  selectedFontId: 'sans',
+  personalInfo: {
+    fullName: "",
+    jobTitle: "",
+    email: "",
+    phone: "",
+    address: "",
+    website: "",
+    photo: "",
+    summary: ""
+  },
+  coverLetter: {
+    recipient: "",
+    subject: "",
+    date: new Date().toLocaleDateString('de-DE'),
+    text: ""
+  },
+  experiences: [],
+  education: [],
+  skills: [],
+  languages: [],
+  strengths: [],
+  additionalSkills: []
+};
+
+    // Added missing properties to INITIAL_DATA to match ResumeData interface
+export const HAUSMEISTER_DATA: ResumeData = {
+  selectedThemeId: 'forest_green',
+  selectedLayoutId: 'classic',
+  selectedFontId: 'sans',
+  personalInfo: {
+    fullName: "Erik von Brandt",
+    jobTitle: "Hausmeister / Technischer Mitarbeiter",
+    email: "erikvonbrandt@gmail.com",
+    phone: "09542 4520366",
+    address: "Pfarrer-Kropfeld-Straße 27, 96110 Scheßlitz",
+    website: "",
+    photo: "",
+    summary: "Zuverlässiger, handwerklich vielseitiger Facharbeiter mit langjähriger Erfahrung in Gebäudeinstandhaltung, Reparatur und Pflege von Außenanlagen sowie technischer Betreuung von Immobilien. Über 25 Jahre selbstständige Tätigkeit mit hoher Eigenverantwortung in Handwerk, Bau, Restaurierung und Objektpflege."
+  },
+  coverLetter: {
+    recipient: "An die Hausverwaltung / Personalabteilung\nAnsprechpartner bekannt / Unbekannt\nMusterstraße 123\n96047 Bamberg",
+    subject: "Bewerbung als Hausmeister / Technischer Mitarbeiter",
+    date: new Date().toLocaleDateString('de-DE'),
+    text: "Sehr geehrte Damen und Herren,\n\nmit großer Motivation bewerbe ich mich auf die Position als Hausmeister bzw. technischer Mitarbeiter. Ich schätze klare Aufgabenbereiche, verlässliche Abläufe und den direkten Beitrag zum Werterhalt von Immobilien. Genau hier sehe ich meine Stärken: sorgfältige Instandhaltung, selbstständiges Erkennen von Mängeln und lösungsorientierte Umsetzung notwendiger Arbeiten.\n\nDurch meine langjährige selbstständige Tätigkeit im handwerklichen Bereich habe ich gelernt, strukturiert, verantwortungsbewusst und zuverlässig zu arbeiten. Mir ist wichtig, Aufgaben nicht nur auszuführen, sondern nachhaltige Lösungen zu schaffen, die Sicherheit, Ordnung und Funktionalität im Gebäude sichern.\n\nIch bringe praktische Erfahrung in Reparatur, Pflege von Außenanlagen sowie im Umgang mit technischen Anlagen mit und arbeite dabei stets respektvoll mit Bewohnern, Eigentümern und externen Dienstleistern zusammen. Besonders wichtig ist mir eine ruhige, freundliche Kommunikation und ein sorgfältiger Umgang mit Ressourcen.\n\nIch freue mich darauf, meine Erfahrung und meine Motivation in Ihre Organisation einzubringen und langfristig verlässlich mitzuwirken.\n\nMit freundlichen Grüßen\nErik von Brandt"
+  },
+  experiences: [
+    {
+       id: "1",
+       company: "Selbstständige handwerkliche Tätigkeit",
+       position: "Handwerker / Objektbetreuer",
+       period: "Seit 1997",
+       description: "Instandhaltung, Reparatur und Pflege von Werkstätten, Ateliers und Gebäuden - Ausführung von Bau-, Ausbau- und Renovierungsarbeiten - Verantwortung für technische Ausstattung und Betriebssicherheit"
+    },
+    {
+       id: "2",
+       company: "Restaurierungs- & Steinmetzbetriebe",
+       position: "Steinmetzgeselle / Restaurator",
+       period: "1991 - 1997",
+       description: "Arbeiten an historischen und öffentlichen Gebäuden - Fassaden, Treppen, Mauern und Natursteinflächen"
+    }
+  ],
+  education: [
+     {
+        id: "1",
+        school: "Städtische Meisterschule München",
+        degree: "Gesellenbrief Steinmetz",
+        period: "1991"
+     },
+     {
+        id: "2",
+        school: "Städtische Meisterschule München",
+        degree: "Ausbildung: Steinmetz und Steinbildhauer",
+        period: "1988 - 1991"
+     }
+  ],
+  skills: [
+    { id: "s1", name: "Gebäude- und Objektbetreuung", level: 5 },
+    { id: "s2", name: "Kleinreparaturen & Instandhaltung", level: 5 },
+    { id: "s3", name: "Außenanlagenpflege", level: 5 },
+    { id: "s4", name: "Technische Anlagen (Sichtkontrollen)", level: 4 },
+    { id: "s5", name: "Elektro- & Sanitärgrundlagen", level: 3 },
+    { id: "s6", name: "Holz- & Malerarbeiten", level: 4 }
+  ],
+  languages: [
+     { id: "l1", name: "Deutsch", level: 5 }
+  ],
+  strengths: [
+    "zuverlässig, eigenständig und verantwortungsbewusst",
+    "sorgfältig, lösungsorientiert und praktisch denkend",
+    "hohe Belastbarkeit im Rahmen klarer Aufgaben",
+    "freundlicher und respektvoller Umgang"
+  ],
+  additionalSkills: [
+     { id: "a1", name: "EDV: Word, Excel (Grundlagen)" }
+  ]
+};
+
+export const PAEDAGOGE_DATA: ResumeData = {
+  selectedThemeId: 'pro_navy',
+  selectedLayoutId: 'modern',
+  selectedFontId: 'sans',
+  personalInfo: {
+    fullName: "Erik von Brandt",
+    jobTitle: "Sozial- und Kulturpädagoge / Künstler",
+    email: "erikvonbrandt@gmail.com",
+    phone: "09542 4520366",
+    address: "Pfarrer-Kropfeld-Straße 27, 96110 Scheßlitz",
+    website: "",
+    photo: "",
+    summary: "Sozial- und kulturpädagogisch ausgebildeter Künstler und Bildhauer mit über 25 Jahren Berufserfahrung in der kreativen Bildungsarbeit, Seminarleitung und projektbezogenen Arbeit mit Kindern, Jugendlichen und Erwachsenen. Langjährige selbstständige Tätigkeit an der Schnittstelle von Kunst, Handwerk, Denkmalpflege und Pädagogik. Erfahren in der Konzeption und Durchführung von praxisnahen, handlungsorientierten Bildungs- und Kulturprojekten in Schulen, Kindergärten, Jugendhilfe, Erwachsenenbildung sowie im musealen und öffentlichen Raum. Ausgeprägte Fähigkeit zur Anleitung von Gruppen, zur individuellen Begleitung sowie zur Vermittlung komplexer Inhalte über kreative und niedrigschwellige Methoden."
+  },
+  coverLetter: {
+    recipient: "An die Hausverwaltung / Personalabteilung\nAnsprechpartner bekannt / Unbekannt\nMusterstraße 123\n96047 Bamberg",
+    subject: "Bewerbung als Sozial- und Kulturpädagoge",
+    date: new Date().toLocaleDateString('de-DE'),
+    text: "Sehr geehrte Damen und Herren,\n\nmit großer Motivation bewerbe ich mich auf eine Teilzeitstelle im sozial- oder kulturpädagogischen Bereich. Als sozial- und kulturpädagogisch ausgebildeter Künstler und Bildhauer bringe ich über 25 Jahre Berufserfahrung in der kreativen Bildungsarbeit, Seminarleitung und projektbezogenen Arbeit mit Kindern, Jugendlichen und Erwachsenen mit.\n\nMeine langjährige selbstständige Tätigkeit an der Schnittstelle von Kunst, Handwerk, Denkmalpflege und Pädagogik hat mir einen praxisnahen, strukturierten und verantwortungsbewussten Arbeitsstil vermittelt.\n\nIch konzipiere und realisiere Bildungs- und Kulturprojekte in Schulen, Kindergärten, der Jugendhilfe, der Erwachsenenbildung sowie im musealen und öffentlichen Raum. Dabei ist mir eine handlungsorientierte, niedrigschwellige Vermittlung wichtig, die Menschen erreicht und individuell fördert. Gruppen anzuleiten, Prozesse zu strukturieren und komplexe Inhalte verständlich aufzubereiten gehört zu meinen zentralen Stärken.\n\nIch suche ein klares, verlässliches Arbeitsumfeld mit nachhaltigen Aufgaben, in dem ich meine Erfahrung und pädagogische Haltung langfristig einbringen kann. Über die Möglichkeit eines persönlichen Kennenlernens freue ich mich sehr.\n\nMit freundlichen Grüßen\nErik von Brandt"
+  },
+  experiences: [
+    {
+       id: "1",
+       company: "Selbstständige künstlerische Tätigkeit",
+       position: "Künstler, Bildhauer & Referent",
+       period: "Seit 1997",
+       description: "Planung und Durchführung von Kunst-, Werk- und Naturprojekten - Seminare, Fortbildungen und Workshops - Künstlerische und kunsthandwerkliche Aufträge - Restaurierungsarbeiten an denkmalgeschützten Objekten"
+    },
+    {
+       id: "2",
+       company: "Kirchliche, öffentliche & historische Bauwerke",
+       position: "Steinmetzgeselle / Restaurator",
+       period: "1991 - 1997",
+       description: "Mitarbeit an kirchlichen, öffentlichen und historischen Bauwerken"
+    }
+  ],
+  education: [
+     {
+        id: "1",
+        school: "Fachhochschule",
+        degree: "Diplom-Sozialpädagoge (FH)",
+        period: ""
+     },
+     {
+        id: "2",
+        school: "Städtische Meisterschule München",
+        degree: "Ausbildung: Steinmetz und Steinbildhauer",
+        period: "1988 - 1991"
+     }
+  ],
+  skills: [
+    { id: "s1", name: "Sozial- & Kulturpädagogik", level: 5 },
+    { id: "s2", name: "Künstlerische Bildungsarbeit", level: 5 },
+    { id: "s3", name: "Seminar-, Kurs- & Workshopleitung", level: 5 },
+    { id: "s4", name: "Projektarbeit", level: 5 },
+    { id: "s5", name: "Gruppenleitung & Indiv. Förderung", level: 5 },
+    { id: "s6", name: "Werken, Plastik & Bildhauerei", level: 4 }
+  ],
+   languages: [
+     { id: "l1", name: "Deutsch", level: 5 },
+     { id: "l2", name: "Englisch", level: 2 },
+     { id: "l3", name: "Französisch", level: 1 },
+     { id: "l4", name: "Latein", level: 1 }
+  ],
+  strengths: [],
+  additionalSkills: []
+};
+
+// Old initialization for reference, not used anymore
+const OLD_INITIAL_DATA: ResumeData = {
   selectedThemeId: 'pro_navy',
   selectedLayoutId: 'modern',
   selectedFontId: 'sans',

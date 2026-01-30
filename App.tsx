@@ -1,13 +1,14 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ResumeData, INITIAL_DATA, LAYOUTS, THEMES } from './types';
+import { ResumeData, INITIAL_DATA, LAYOUTS, THEMES, SavedVersion, HAUSMEISTER_DATA, PAEDAGOGE_DATA } from './types';
 import ResumeForm from './components/ResumeForm';
 import ResumePreview from './components/ResumePreview';
 import { generatePDF } from './services/pdfService';
-import { Layout, Edit3, Sparkles, FileText, UserCheck, Files } from 'lucide-react';
+import { Layout, Edit3, Sparkles, FileText, UserCheck, Files, Save, Download, Trash2, Clock } from 'lucide-react';
 
 const App: React.FC = () => {
   const [data, setData] = useState<ResumeData>(INITIAL_DATA);
+  const [savedVersions, setSavedVersions] = useState<SavedVersion[]>([]);
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
   const [isExporting, setIsExporting] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
@@ -25,7 +26,60 @@ const App: React.FC = () => {
   useEffect(() => {
     setHasMounted(true);
     setShowTutorialIntro(true);
+    try {
+      const rawVersions = localStorage.getItem('cv-master-versions');
+      if (rawVersions) {
+        setSavedVersions(JSON.parse(rawVersions));
+      } else {
+         const defaultVersions: SavedVersion[] = [
+          {
+            id: 'default-hausmeister',
+            name: 'Bewerbung Hausmeister',
+            timestamp: Date.now(),
+            data: HAUSMEISTER_DATA
+          },
+          {
+            id: 'default-paedagoge',
+            name: 'Bewerbung Sozialpädagoge',
+            timestamp: Date.now(),
+            data: PAEDAGOGE_DATA
+          }
+        ];
+        setSavedVersions(defaultVersions);
+        localStorage.setItem('cv-master-versions', JSON.stringify(defaultVersions));
+      }
+    } catch (e) {
+      console.warn('Failed to load versions', e);
+    }
   }, []);
+
+  const saveVersion = (name: string) => {
+    if (!name.trim()) return;
+    const newVersion: SavedVersion = {
+      id: Date.now().toString(),
+      name: name,
+      timestamp: Date.now(),
+      data: { ...data }
+    };
+    const newVersions = [newVersion, ...savedVersions];
+    setSavedVersions(newVersions);
+    localStorage.setItem('cv-master-versions', JSON.stringify(newVersions));
+  };
+
+  const loadVersion = (version: SavedVersion) => {
+    if (window.confirm(`Möchtest du wirklich die Version "${version.name}" laden? Ungespeicherte Änderungen gehen verloren.`)) {
+      setData(version.data);
+    }
+  };
+
+  const deleteVersion = (id: string) => {
+    if (window.confirm('Diese Version wirklich löschen?')) {
+      const newVersions = savedVersions.filter(v => v.id !== id);
+      setSavedVersions(newVersions);
+      localStorage.setItem('cv-master-versions', JSON.stringify(newVersions));
+    }
+  };
+
 
 
 
@@ -101,6 +155,7 @@ const App: React.FC = () => {
   }, [data.coverLetter.date]);
 
   const tutorialSteps = [
+    { key: 'versions', selector: '[data-tour="versionSection"]', title: 'Versionen verwalten', body: 'Hier kannst du verschiedene Bewerbungsversionen speichern und laden.', input: 'none' },
     { key: 'personalInfo', selector: '[data-tour="personalInfoSection"]', title: 'Persönliche Daten', body: 'Hier trägst du die Basisdaten ein. Foto kannst du oben links hochladen.', input: 'none' },
     { key: 'summary', selector: '[data-tour="summarySection"]', title: 'Kurzprofil', body: 'Fasse deine Erfahrung in wenigen Sätzen zusammen.', input: 'none' },
     { key: 'coverLetter', selector: '[data-tour="coverLetterSection"]', title: 'Anschreiben', body: 'Pflege Empfänger, Datum und Text. Das Datum ist editierbar.', input: 'none' },
@@ -338,6 +393,7 @@ const App: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
+          
           <div className="hidden xl:flex bg-slate-100 p-1 rounded-lg mr-2">
             <button 
               onClick={() => setActiveTab('edit')}
@@ -444,6 +500,10 @@ const App: React.FC = () => {
             <ResumeForm
               data={data}
               onChange={setData}
+              savedVersions={savedVersions}
+              onSaveVersion={saveVersion}
+              onLoadVersion={loadVersion}
+              onDeleteVersion={deleteVersion}
               tutorial={
                 showTutorial && !showTutorialIntro
                   ? {
@@ -493,6 +553,44 @@ const App: React.FC = () => {
           Vorschau
         </button>
       </div>
+
+      {showTutorialIntro && hasMounted && (
+        <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Tutorial</p>
+                <h2 className="text-xl font-black text-slate-900 mt-1">Willkommen</h2>
+              </div>
+              <button
+                onClick={handleCloseTutorial}
+                className="text-slate-400 hover:text-slate-600 text-sm"
+                aria-label="Tutorial schließen"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="text-sm text-slate-600 mt-4 leading-relaxed">
+              Dieses Tutorial zeigt dir kurz den Aufbau des Editors, damit du schnell deinen Lebenslauf erstellen kannst.
+              Du kannst es jederzeit beenden.
+            </p>
+            <div className="flex items-center justify-between mt-6">
+              <button
+                onClick={handleCloseTutorial}
+                className="text-xs font-bold text-slate-500 hover:text-slate-700"
+              >
+                Tutorial beenden
+              </button>
+              <button
+                onClick={handleStartTutorial}
+                className="px-3 py-2 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700"
+              >
+                Tutorial starten
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

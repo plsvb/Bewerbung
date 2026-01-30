@@ -15,12 +15,28 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
   const font = FONT_OPTIONS.find(f => f.id === data.selectedFontId) || FONT_OPTIONS[0];
   const layout = data.selectedLayoutId || 'modern';
   
-  const accentColor = theme.accent;
-  const accentBg = theme.accentBg;
-  const sidebarBg = theme.sidebar;
+  const customColors = data.customColors;
+  
+  // Helper to determine brightness
+  const isHexDark = (hex: string) => {
+    if (!hex) return true;
+    const c = hex.replace('#', '');
+    const r = parseInt(c.substring(0, 2), 16);
+    const g = parseInt(c.substring(2, 4), 16);
+    const b = parseInt(c.substring(4, 6), 16);
+    const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    return luma < 140; 
+  };
+
+  const accentColor = customColors ? 'custom-accent-text' : theme.accent;
+  const accentBg = customColors ? 'custom-accent-bg' : theme.accentBg;
+  const sidebarBg = customColors ? 'custom-sidebar-bg' : theme.sidebar;
   const fontClass = font.class;
 
-  const isDarkSidebar = sidebarBg.includes('slate-9') || sidebarBg.includes('black') || sidebarBg.includes('slate-8');
+  const isDarkSidebar = customColors 
+    ? isHexDark(customColors.secondary)
+    : sidebarBg.includes('slate-9') || sidebarBg.includes('black') || sidebarBg.includes('slate-8') || sidebarBg.includes('indigo-700') || sidebarBg.includes('emerald-600') || sidebarBg.includes('slate-700') || sidebarBg.includes('blue-700') || sidebarBg.includes('orange-700');
+    
   const sidebarTextColor = isDarkSidebar ? 'text-white' : 'text-slate-800';
   const strengths = data.strengths ?? [];
   const additionalSkills = data.additionalSkills ?? [];
@@ -618,6 +634,13 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
 
   return (
     <div className="flex flex-col gap-12 items-center bg-slate-300 py-12 overflow-y-auto h-full hide-scrollbar">
+      {customColors && (
+        <style>{`
+          .custom-accent-text { color: ${customColors.primary} !important; }
+          .custom-accent-bg { background-color: ${customColors.primary} !important; }
+          .custom-sidebar-bg { background-color: ${customColors.secondary} !important; }
+        `}</style>
+      )}
       
       {/* 1. ANSCHREIBEN (Layout-aware) */}
       <div ref={coverLetterRef} className={`a4-page p-20 flex flex-col text-slate-800 relative bg-white ${fontClass}`}>

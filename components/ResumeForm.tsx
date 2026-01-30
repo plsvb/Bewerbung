@@ -1,11 +1,15 @@
 
 import React, { useState } from 'react';
-import { ResumeData, THEMES, ThemeId, LAYOUTS, LayoutId, FONT_OPTIONS, FontId } from '../types';
-import { Plus, Trash2, User, Briefcase, GraduationCap, Code, FileText, Palette, Check, Camera, Layout, Type } from 'lucide-react';
+import { ResumeData, THEMES, ThemeId, LAYOUTS, LayoutId, FONT_OPTIONS, FontId, SavedVersion } from '../types';
+import { Plus, Trash2, User, Briefcase, GraduationCap, Code, FileText, Palette, Check, Camera, Layout, Type, Save, Clock, ChevronDown } from 'lucide-react';
 
 interface Props {
   data: ResumeData;
   onChange: (newData: ResumeData) => void;
+  savedVersions?: SavedVersion[];
+  onSaveVersion?: (name: string) => void;
+  onLoadVersion?: (version: SavedVersion) => void;
+  onDeleteVersion?: (id: string) => void;
   tutorial?: {
     activeKey: string;
     title: string;
@@ -20,9 +24,11 @@ interface Props {
   };
 }
 
-const ResumeForm: React.FC<Props> = ({ data, onChange, tutorial }) => {
+const ResumeForm: React.FC<Props> = ({ data, onChange, savedVersions = [], onSaveVersion, onLoadVersion, onDeleteVersion, tutorial }) => {
   const [aiModalOpen, setAiModalOpen] = useState(false);
   const [aiJobDescription, setAiJobDescription] = useState('');
+  const [newVersionName, setNewVersionName] = useState('');
+  const [isVersionMenuOpen, setIsVersionMenuOpen] = useState(false);
 
     const renderTutorialBlock = (key: string) => {
       if (!tutorial || tutorial.activeKey !== key) return null;
@@ -183,6 +189,94 @@ Zusatzkenntnisse: ${additionalSkillsText}`;
 
   return (
     <div className="space-y-10 p-6 bg-white rounded-xl shadow-sm pb-32">
+        {/* Version Management */}
+        {(onSaveVersion && savedVersions) && (
+          <section className={`${tutorial?.activeKey && tutorial.activeKey !== 'versions' ? 'tutorial-dim' : ''}`} data-tour="versionSection">
+            {renderTutorialBlock('versions')}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+             <div className="flex items-center gap-2 mb-4">
+                <div className="bg-blue-100 p-2 rounded-lg text-blue-600">
+                  <Clock size={20} />
+                </div>
+                <h3 className="text-lg font-bold text-slate-800">Versionen & Speicherstände</h3>
+             </div>
+             
+             <div className="bg-slate-50 rounded-lg p-4 border border-slate-200 space-y-4">
+                <div className="flex gap-2">
+                   <input
+                      type="text"
+                      value={newVersionName}
+                      onChange={(e) => setNewVersionName(e.target.value)}
+                      placeholder="Name für aktuellen Stand (z.B. 'Bewerbung Google')"
+                      className="flex-1 px-3 py-2 text-sm border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && newVersionName.trim()) {
+                           onSaveVersion(newVersionName);
+                           setNewVersionName('');
+                        }
+                      }}
+                   />
+                   <button
+                      onClick={() => {
+                        if (newVersionName.trim()) {
+                           onSaveVersion(newVersionName);
+                           setNewVersionName('');
+                        }
+                      }}
+                      disabled={!newVersionName.trim()}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-bold hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
+                   >
+                      <Save size={16} />
+                      Speichern
+                   </button>
+                </div>
+                
+                {savedVersions.length > 0 && (
+                  <div className="relative">
+                    <button
+                      onClick={() => setIsVersionMenuOpen(!isVersionMenuOpen)}
+                      className="w-full flex items-center justify-between px-3 py-2 bg-white border border-slate-300 rounded-md text-sm text-slate-700 hover:bg-slate-50"
+                    >
+                      <span className="font-medium">Andere Version laden ({savedVersions.length})</span>
+                      <ChevronDown size={16} className={`transition-transform ${isVersionMenuOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    
+                    {isVersionMenuOpen && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto">
+                        {savedVersions.map((version) => (
+                           <div key={version.id} className="flex items-center justify-between p-2 hover:bg-slate-50 border-b last:border-0 border-slate-100">
+                              <div 
+                                className="flex-1 cursor-pointer"
+                                onClick={() => {
+                                   if (onLoadVersion) {
+                                      onLoadVersion(version);
+                                      setIsVersionMenuOpen(false);
+                                   }
+                                }}
+                              >
+                                 <div className="font-bold text-sm text-slate-800">{version.name}</div>
+                                 <div className="text-xs text-slate-500">{new Date(version.timestamp).toLocaleDateString()}</div>
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (onDeleteVersion) onDeleteVersion(version.id);
+                                }}
+                                className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                           </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+             </div>
+          </div>
+          </section>
+        )}
+
       {/* Layout Selection */}
       <section className={`${tutorial?.activeKey && tutorial.activeKey !== 'layout' ? 'tutorial-dim' : ''} ${tutorial?.activeKey === 'layout' ? 'tutorial-no-dim-preview' : ''}`} data-tour="layoutSection">
         {renderTutorialBlock('layout')}
@@ -269,6 +363,63 @@ Zusatzkenntnisse: ${additionalSkillsText}`;
               </span>
             </button>
           ))}
+        </div>
+
+        {/* Custom Colors */}
+        <div className="mt-6 p-4 bg-slate-50 rounded-xl border border-slate-200">
+           <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-slate-700">Benutzerdefinierte Farben</h3>
+              {data.customColors && (
+                 <button 
+                  onClick={() => onChange({ ...data, customColors: undefined })}
+                  className="text-xs text-red-500 hover:text-red-700 font-bold"
+                 >
+                   Zurücksetzen
+                 </button>
+              )}
+           </div>
+           
+           <div className="flex gap-6">
+              <label className="flex flex-col gap-2">
+                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Primärfarbe (Text)</span>
+                 <div className="flex items-center gap-2">
+                   <input 
+                      type="color" 
+                      value={data.customColors?.primary || '#3b82f6'}
+                      onChange={(e) => onChange({
+                        ...data,
+                        customColors: {
+                          secondary: data.customColors?.secondary || '#1e293b',
+                          ...data.customColors,
+                          primary: e.target.value
+                        }
+                      })}
+                      className="w-10 h-10 rounded-lg cursor-pointer border-none p-0 bg-transparent"
+                   />
+                   <span className="text-xs font-mono text-slate-600 uppercase">{data.customColors?.primary || 'Standard'}</span>
+                 </div>
+              </label>
+
+              <label className="flex flex-col gap-2">
+                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sekundärfarbe (Sidebar/Bg)</span>
+                 <div className="flex items-center gap-2">
+                   <input 
+                      type="color" 
+                      value={data.customColors?.secondary || '#1e293b'}
+                      onChange={(e) => onChange({
+                        ...data,
+                        customColors: {
+                          primary: data.customColors?.primary || '#3b82f6',
+                          ...data.customColors,
+                          secondary: e.target.value
+                        }
+                      })}
+                      className="w-10 h-10 rounded-lg cursor-pointer border-none p-0 bg-transparent"
+                   />
+                   <span className="text-xs font-mono text-slate-600 uppercase">{data.customColors?.secondary || 'Standard'}</span>
+                 </div>
+              </label>
+           </div>
         </div>
       </section>
 
