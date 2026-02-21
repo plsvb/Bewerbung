@@ -10,6 +10,7 @@ interface Props {
   onSaveVersion?: (name: string) => void;
   onLoadVersion?: (version: SavedVersion) => void;
   onDeleteVersion?: (id: string) => void;
+  onReset?: () => void;
   tutorial?: {
     activeKey: string;
     title: string;
@@ -24,7 +25,7 @@ interface Props {
   };
 }
 
-const ResumeForm: React.FC<Props> = ({ data, onChange, savedVersions = [], onSaveVersion, onLoadVersion, onDeleteVersion, tutorial }) => {
+const ResumeForm: React.FC<Props> = ({ data, onChange, savedVersions = [], onSaveVersion, onLoadVersion, onDeleteVersion, onReset, tutorial }) => {
   const [aiModalOpen, setAiModalOpen] = useState(false);
   const [aiJobDescription, setAiJobDescription] = useState('');
   const [newVersionName, setNewVersionName] = useState('');
@@ -244,11 +245,14 @@ Zusatzkenntnisse: ${additionalSkillsText}`;
                     {isVersionMenuOpen && (
                       <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto">
                         {savedVersions.map((version) => (
-                           <div key={version.id} className="flex items-center justify-between p-2 hover:bg-slate-50 border-b last:border-0 border-slate-100">
+                           <div key={version.id} className="flex items-center justify-between p-2 hover:bg-slate-50 border-b border-slate-100 last:border-0 relative group">
                               <div 
-                                className="flex-1 cursor-pointer"
+                                className="flex-1 cursor-pointer pr-8"
                                 onClick={() => {
                                    if (onLoadVersion) {
+                                      // Bestätigung ist jetzt im Parent (App.tsx) oder hier?
+                                      // Die Funktion in App.tsx hat window.confirm. 
+                                      // Hier rufen wir sie einfach auf.
                                       onLoadVersion(version);
                                       setIsVersionMenuOpen(false);
                                    }
@@ -262,14 +266,30 @@ Zusatzkenntnisse: ${additionalSkillsText}`;
                                   e.stopPropagation();
                                   if (onDeleteVersion) onDeleteVersion(version.id);
                                 }}
-                                className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-all"
+                                title="Löschen"
                               >
                                 <Trash2 size={14} />
                               </button>
                            </div>
                         ))}
+                        {onReset && (
+                          <div className="p-2 border-t border-slate-100 bg-slate-50">
+                            <button
+                              onClick={() => {
+                                onReset();
+                                setIsVersionMenuOpen(false);
+                              }}
+                              className="w-full text-center text-xs text-red-600 hover:text-red-700 hover:bg-red-100 py-2 rounded-md transition-colors font-bold border border-red-200 flex items-center justify-center gap-2"
+                            >
+                              <Trash2 size={12} />
+                              Alle Vorlagen neu laden (Reset)
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
+
                   </div>
                 )}
              </div>

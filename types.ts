@@ -406,3 +406,181 @@ const OLD_INITIAL_DATA: ResumeData = {
     { id: "a5", name: "EDV: Word, Excel (Grundlagen), Photoshop" }
   ]
 };
+
+export const ORCHESTER_DATA: ResumeData = {
+  selectedThemeId: 'modern_emerald',
+  selectedLayoutId: 'classic',
+  selectedFontId: 'serif',
+  personalInfo: {
+    fullName: "Peter Alexander Jabornicky",
+    jobTitle: "MITARBEITER FÜR BÜHNENAUFBAU / LOGISTIK",
+    email: "gojabo@freenet.de",
+    phone: "01722327059",
+    address: "Herzog-Max-Straße 7, 96047 Bamberg",
+    website: "",
+    photo: "",
+    summary: "Erfahrener Produktionsmitarbeiter mit ausgeprägtem handwerklichem Geschick und Logistik-Erfahrung bei nationalen und internationalen Produktionen. Routiniert im Auf- und Abbau von Equipment, stressresistent und teamfähig. Durch langjährige Tätigkeit bei Film- und TV-Reihenproduktionen bestens vertraut mit flexiblen Arbeitszeiten, Reisetätigkeit und der Arbeit hinter den Kulissen."
+  },
+  coverLetter: {
+    recipient: "Stiftung Bamberger Symphoniker\n- Bayerische Staatsphilharmonie\nMußstraße 1\n96047 Bamberg",
+    subject: "BEWERBUNG ALS MITARBEITER FÜR BÜHNENAUFBAU UND INSTRUMENTENTRANSPORTE",
+    date: "16.02.2026",
+    text: "Sehr geehrte Frau Müller,\n\nmit meiner langjährigen Erfahrung in der Produktionslogistik und meinem handwerklichen Hintergrund bringe ich genau die Fähigkeiten mit, die Sie für den Bühnenaufbau und Instrumententransport suchen. Als Bamberger freue ich mich besonders über die Möglichkeit, Ihr Orchester hinter den Kulissen zu unterstützen.\n\nDie Arbeit mit sensiblen Musikinstrumenten und dem entsprechenden Equipment ist mir durch meine frühere Tätigkeit in der Lagerlogistik bei der Thomann GmbH bereits vertraut.\n\nIn den vergangenen Jahren war ich überwiegend in der Produktionslogistik für Film- und Fernsehproduktionen tätig, zuletzt als Set-Aufnahmeleiter für die ZDF-Reihe „Frühling\". Den termingerechten Auf- und Abbau von Equipment, die Koordination hinter den Kulissen sowie körperlich anspruchsvolle Arbeit bin ich aus meinem Berufsalltag gewohnt. Auch unregelmäßige Arbeitszeiten an Abenden oder Wochenenden sowie internationale Reisetätigkeiten stellen für mich kein Problem dar. Für Einsätze im Ausland bringe ich gute Englischkenntnisse mit. Für die anfallenden Transporte verfüge ich zudem über den alten Führerschein (Klasse 3 bzw. 2), der die von Ihnen gewünschte Klasse CE einschließt.\n\nGerne unterstütze ich Ihr Team tatkräftig bei den kommenden Proben und Konzerten. Auf die Gelegenheit zu einem persönlichen Kennenlernen freue ich mich.\n\nPeter Alexander Jabornicky"
+  },
+  experiences: [
+    {
+      id: "1",
+      company: "DIVERSE NAMHAFTE FILM- UND TV-PRODUKTIONEN (U.A. FÜR ZDF, ARD, BR, WDR)",
+      position: "SET-AUFNAHMELEITUNG / PRODUKTION",
+      period: "2016 - 2025",
+      description: "Verantwortung für logistische Abläufe am Set bei zahlreichen TV-Reihen und Filmen (u.a. „Frühling“, „Tatort“, „Rosamunde Pilcher“, „Polizeiruf 110“). Koordination von Technik, Equipment und Personal sowie Sicherstellung der Arbeitssicherheit. Routinierter Auf- und Abbau unter hohem Zeitdruck und Organisation komplexer Außeneinsätze."
+    },
+    {
+      id: "2",
+      company: "THOMANN GMBH",
+      position: "LAGERIST / LOGISTIK",
+      period: "2012-2016",
+      description: "Fachgerechter Umgang mit Musikinstrumenten und Equipment, Lagerlogistik und Versand. Erfahrung im sorgfältigen Transport sensibler Güter."
+    },
+    {
+      id: "3",
+      company: "FRISEURSALON JABO HAIR",
+      position: "EIGENTÜMER / FRISEUR",
+      period: "2003-2012",
+      description: "Leitung des eigenen Salons, Personalverantwortung, Kundenbetreuung und kaufmännische Verwaltung."
+    },
+    {
+      id: "4",
+      company: "DIVERSE PRODUKTIONEN (KINO & TV)",
+      position: "PRODUKTIONSFAHRER / ASSISTENT SET-AL",
+      period: "1993 - 2003",
+      description: "Transport von Equipment und Personal, Unterstützung bei Auf- und Abbauarbeiten, internationale Dreharbeiten (u.a. Australien, Tschechien, Spanien, Niederlande)."
+    }
+  ],
+  education: [
+    {
+      id: "1",
+      school: "HANDWERKSKAMMER",
+      degree: "Friseurmeister (Meisterbrief)",
+      period: ""
+    },
+    {
+      id: "2",
+      school: "AUS- UND WEITERBILDUNG",
+      degree: "Hygienebeauftragter für Film-, Fernseh- und Fotoproduktionen",
+      period: ""
+    },
+    {
+      id: "3",
+      school: "ZERTIFIKAT",
+      degree: "Brandschutzhelfer",
+      period: ""
+    },
+    {
+      id: "4",
+      school: "ZERTIFIKAT",
+      degree: "Zertifizierter Ersthelfer",
+      period: ""
+    }
+  ],
+  skills: [
+    { id: "s1", name: "LOGISTIK & TRANSPORT", level: 5 },
+    { id: "s2", name: "HANDWERKLICHES GESCHICK", level: 5 },
+    { id: "s3", name: "TEAMFÄHIGKEIT & FLEXIBILITÄT", level: 5 },
+    { id: "s4", name: "ENGLISCH", level: 4 }
+  ],
+  languages: [
+    { id: "l1", name: "Deutsch", level: 5 },
+    { id: "l2", name: "Englisch", level: 4 }
+  ],
+  strengths: [
+    "LOGISTIK & TRANSPORT",
+    "HANDWERKLICHES GESCHICK",
+    "TEAMFÄHIGKEIT & FLEXIBILITÄT"
+  ],
+  additionalSkills: []
+};
+
+export const FILM_DATA: ResumeData = {
+  selectedThemeId: 'tech_midnight',
+  selectedLayoutId: 'minimal',
+  selectedFontId: 'sans',
+  personalInfo: {
+    fullName: "Peter Alexander Jabornicky",
+    jobTitle: "Set-Aufnahmeleiter / Produktionsfahrer",
+    email: "",
+    phone: "",
+    address: "München, Deutschland",
+    website: "",
+    photo: "",
+    summary: "Erfahrener Produktionsmitarbeiter mit Schwerpunkt auf Set-Aufnahmeleitung und Produktionsfahren bei nationalen und internationalen Film- und TV-Produktionen. Flexibel, zuverlässig und lösungsorientiert mit umfassender Erfahrung bei Reihenproduktionen wie der ZDF-Reihe 'Frühling'."
+  },
+  coverLetter: {
+    recipient: "An die Produktionsleitung",
+    subject: "Bewerbung als Set-Aufnahmeleiter / Produktionsfahrer",
+    date: new Date().toLocaleDateString('de-DE'),
+    text: "Sehr geehrte Damen und Herren,\\n\\nmit großem Interesse bewerbe ich mich um eine Mitarbeit in Ihrem aktuellen Projekt. Durch meine langjährige Erfahrung bei Reihenproduktionen wie 'Frühling' (ZDF) sowie bei diversen TV-Movies bin ich mit den Anforderungen am Set bestens vertraut.\\n\\nIch bringe ein hohes Maß an Zuverlässigkeit, Teamfähigkeit und Flexibilität mit und bin gewohnt, auch unter Zeitdruck strukturiert zu arbeiten. Ob als Set-Aufnahmeleiter oder Produktionsfahrer – ich sorge für reibungslose Abläufe und unterstütze das Team proaktiv.\\n\\nGerne überzeuge ich Sie in einem persönlichen Gespräch von meiner Motivation und meinen Fähigkeiten.\\n\\nMit freundlichen Grüßen\\nPeter Alexander Jabornicky"
+  },
+  experiences: [
+    {
+      id: "1",
+      company: "Seven Dogs Filmproduktion GmbH",
+      position: "Set-Aufnahmeleitung / Produktion (Reihe 'Frühling')",
+      period: "2021 - 2025",
+      description: "TV-Filme (ZDF):\\n- 2025: Am Ende einer Lüge, Wenn alle schweigen, Einhundert Meter\\n- 2024: Mein Geheimnis dein Geheimnis, Wenn du nicht still bist, Babyalarm\\n- 2023: Ein Zebra im Gepäck, Wenn die Zeit stehen bleibt, Die verschwundenen Eltern\\n- 2022: Lauf weg wenn du kannst, Flüsternde Geister, Das Mädchen hinter der Tür, Eine Handvoll Zeit, Das Geheimnis vom Rabenkopf, Kleiner Engel kleiner Teufel\\n- 2021: Alte Gespenster\\nRegie: Thomas Kronthaler, Axel Barth, Tom Zenker"
+    },
+    {
+      id: "2",
+      company: "High Fidelity Pictures GmbH",
+      position: "Produktion / Set",
+      period: "2025",
+      description: "Das Haus am Gletscher (AT), TV-Film (ARD, Degeto)\\nRegie: Stephan Rick"
+    },
+    {
+      id: "3",
+      company: "FFP New Media GmbH",
+      position: "Produktion / Set (Rosamunde Pilcher)",
+      period: "2024",
+      description: "TV-Filme (ZDF):\\n- Wer immer du bist (Regie: Dagmar Seume)\\n- Jahrestag (Regie: Karola Meeder)"
+    },
+    {
+      id: "4",
+      company: "Bavaria Fiction GmbH",
+      position: "Produktion / Set",
+      period: "2023",
+      description: "SOKO Stuttgart, TV-Serie (ZDF)\\nRegie: Tanja Roitzheim"
+    },
+    {
+      id: "5",
+      company: "Diverse Produktionen",
+      position: "Filme in anderen Tätigkeiten (Produktionsfahrer / Assistent Set-AL)",
+      period: "Bis 2025",
+      description: "- 2025: Mädchen in Uniform (Kino, Regie: Justina Jürgensen, NORDPOLARIS) - Produktionsfahrer\\n- 2010: Resturlaub (Kino, Regie: Gregor Schnitzler, Deutsche Columbia) - Assistent der Set-AL\\n- 2009: In der Welt habt ihr Angst (Kino, Regie: Hans W. Geißendörfer) - Assistent der Set-AL / KV Set-AL\\n- 2003: Sams in Gefahr (Kino, Regie: Ben Verbong, Collina Film) - Assistent der Set-AL\\n- 1994: Der König (TV-Serie, SAT.1, F&S Projektfilm) - Produktionsfahrer\\n- 1993: Der König (TV-Serie, SAT.1, ndF) - Produktionsfahrer"
+    }
+  ],
+  education: [
+    {
+      id: "1",
+      school: "Aus- und Weiterbildung",
+      degree: "Hygienebeauftragter für Film-, Fernseh- und Fotoproduktionen",
+      period: ""
+    }
+  ],
+  skills: [
+    { id: "s1", name: "Set-Aufnahmeleitung", level: 5 },
+    { id: "s2", name: "Produktionsfahrer", level: 5 },
+    { id: "s3", name: "Filmproduktion", level: 5 },
+    { id: "s4", name: "Auslandserfahrung (Australien, CZ, ES, NL)", level: 4 }
+  ],
+  languages: [
+    { id: "l1", name: "Deutsch", level: 5 },
+    { id: "l2", name: "Englisch", level: 3 }
+  ],
+  strengths: [
+    "Flexibel und belastbar",
+    "Organisationsstark",
+    "Teamfähig",
+    "Erfahren bei Reihenproduktionen"
+  ],
+  additionalSkills: []
+};

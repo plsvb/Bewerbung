@@ -10,6 +10,54 @@ interface Props {
   cvPageRef: React.RefObject<HTMLDivElement>;
 }
 
+const FormattedDescription: React.FC<{ text: string, className?: string }> = ({ text, className }) => {
+  if (!text) return null;
+
+  const lines = text.split('\n');
+  const elements: React.ReactNode[] = [];
+  let currentList: string[] = [];
+
+  const flushList = (keyPrefix: string) => {
+    if (currentList.length > 0) {
+      elements.push(
+        <ul key={`${keyPrefix}-list`} className="list-disc ml-4 mb-2 space-y-0.5">
+          {currentList.map((item, i) => (
+            <li key={i} className="pl-1">{item}</li>
+          ))}
+        </ul>
+      );
+      currentList = [];
+    }
+  };
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+    // Check for bullet points: starts with -, *, • (optional space after)
+    const isBullet = /^[-*•+]/.test(trimmed);
+
+    if (isBullet) {
+      const content = trimmed.replace(/^[-*•+]\s*/, '').trim();
+      currentList.push(content);
+    } else {
+      flushList(`idx-${index}`);
+      if (trimmed.length > 0) {
+        elements.push(
+          <div key={`p-${index}`} className="mb-1 leading-relaxed">
+           {line}
+          </div>
+        );
+      } else {
+          // Empty line
+         elements.push(<div key={`br-${index}`} className="h-2"></div>);
+      }
+    }
+  });
+
+  flushList('end');
+
+  return <div className={className}>{elements}</div>;
+};
+
 const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cvPageRef }) => {
   const theme = THEMES.find(t => t.id === data.selectedThemeId) || THEMES[0];
   const font = FONT_OPTIONS.find(f => f.id === data.selectedFontId) || FONT_OPTIONS[0];
@@ -110,7 +158,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                     <div className="col-span-9">
                       <h4 className="text-sm font-black uppercase">{exp.position}</h4>
                       <p className={`text-[11px] font-bold mb-2 ${accentColor}`}>{exp.company}</p>
-                      <p className="text-xs text-slate-600 whitespace-pre-line leading-relaxed">{exp.description}</p>
+                      <FormattedDescription text={exp.description} className="text-xs text-slate-600 leading-relaxed" />
                     </div>
                   </div>
                 ))}
@@ -204,7 +252,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                           <span className="text-[10px] font-bold text-slate-400">{exp.period}</span>
                         </div>
                         <p className={`text-[11px] font-bold uppercase mb-3 ${accentColor}`}>{exp.company}</p>
-                        <p className="text-xs text-slate-500 leading-relaxed">{exp.description}</p>
+                        <FormattedDescription text={exp.description} className="text-xs text-slate-500 leading-relaxed" />
                       </div>
                     ))}
                   </div>
@@ -292,7 +340,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                       <span className="text-[10px] font-bold text-slate-400">{exp.period}</span>
                     </div>
                     <p className={`text-[11px] font-bold mb-2 ${accentColor}`}>{exp.company}</p>
-                    <p className="text-xs text-slate-600 leading-relaxed">{exp.description}</p>
+                    <FormattedDescription text={exp.description} className="text-xs text-slate-600 leading-relaxed" />
                   </div>
                 ))}
               </div>
@@ -370,7 +418,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                       <span className="text-[10px] font-bold text-slate-400">{exp.period}</span>
                     </div>
                     <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${accentColor}`}>{exp.company}</p>
-                    <p className="text-xs text-slate-500 leading-relaxed">{exp.description}</p>
+                    <FormattedDescription text={exp.description} className="text-xs text-slate-500 leading-relaxed" />
                   </div>
                 ))}
               </div>
@@ -488,7 +536,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                         <span className="text-[10px] font-bold text-slate-400">{exp.period}</span>
                       </div>
                       <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 ${accentColor}`}>{exp.company}</p>
-                      <p className="text-xs text-slate-500 leading-relaxed">{exp.description}</p>
+                      <FormattedDescription text={exp.description} className="text-xs text-slate-500 leading-relaxed" />
                     </div>
                   ))}
                 </div>
@@ -603,7 +651,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                   <div className="col-span-9">
                     <h4 className="text-sm font-black uppercase tracking-tight leading-none mb-1">{exp.position}</h4>
                     <p className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${accentColor}`}>{exp.company}</p>
-                    <p className="text-xs text-slate-500 leading-relaxed border-l-2 border-slate-50 pl-4">{exp.description}</p>
+                    <FormattedDescription text={exp.description} className="text-xs text-slate-500 leading-relaxed border-l-2 border-slate-50 pl-4" />
                   </div>
                 </div>
               ))}

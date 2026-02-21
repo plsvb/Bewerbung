@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ResumeData, INITIAL_DATA, LAYOUTS, THEMES, SavedVersion, HAUSMEISTER_DATA, PAEDAGOGE_DATA } from './types';
+import { ResumeData, INITIAL_DATA, LAYOUTS, THEMES, SavedVersion, HAUSMEISTER_DATA, PAEDAGOGE_DATA, FILM_DATA, ORCHESTER_DATA } from './types';
 import ResumeForm from './components/ResumeForm';
 import ResumePreview from './components/ResumePreview';
 import { generatePDF } from './services/pdfService';
@@ -43,6 +43,18 @@ const App: React.FC = () => {
             name: 'Bewerbung Sozialpädagoge',
             timestamp: Date.now(),
             data: PAEDAGOGE_DATA
+          },
+          {
+            id: 'default-film',
+            name: 'Bewerbung Film (Set-AL / Produktion)',
+            timestamp: Date.now(),
+            data: FILM_DATA
+          },
+          {
+            id: 'default-orchester',
+            name: 'Bewerbung Bamberger Symphoniker',
+            timestamp: Date.now(),
+            data: ORCHESTER_DATA
           }
         ];
         setSavedVersions(defaultVersions);
@@ -79,6 +91,14 @@ const App: React.FC = () => {
       localStorage.setItem('cv-master-versions', JSON.stringify(newVersions));
     }
   };
+
+  const resetToDefaults = () => {
+    if (window.confirm('ACHTUNG: Alle gespeicherten Versionen werden gelöscht und die Standard-Vorlagen neu geladen! Fortfahren?')) {
+      localStorage.removeItem('cv-master-versions');
+      window.location.reload();
+    }
+  };
+
 
 
 
@@ -504,6 +524,7 @@ const App: React.FC = () => {
               onSaveVersion={saveVersion}
               onLoadVersion={loadVersion}
               onDeleteVersion={deleteVersion}
+              onReset={resetToDefaults}
               tutorial={
                 showTutorial && !showTutorialIntro
                   ? {
