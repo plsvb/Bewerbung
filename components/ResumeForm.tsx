@@ -334,23 +334,21 @@ Zusatzkenntnisse: ${additionalSkillsText}`;
           <Type className="text-blue-600" size={20} />
           <h2 className="text-lg font-bold">Schriftart</h2>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          {FONT_OPTIONS.map((font) => (
-            <button
-              key={font.id}
-              onClick={() => selectFont(font.id)}
-              className={`flex flex-col items-center p-3 rounded-xl border-2 transition-all ${
-                data.selectedFontId === font.id 
-                ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-100' 
-                : 'border-slate-100 hover:border-slate-200'
-              }`}
-            >
-              <span className={`text-lg mb-1 ${font.class}`}>Aa</span>
-              <span className={`text-[8px] font-bold uppercase truncate w-full text-center ${data.selectedFontId === font.id ? 'text-blue-700' : 'text-slate-500'}`}>
-                {font.name.split(' ')[0]}
-              </span>
-            </button>
-          ))}
+        
+        <div className="relative">
+          <select
+            value={data.selectedFontId}
+            onChange={(e) => selectFont(e.target.value as FontId)}
+            className="w-full p-3 pl-10 bg-white border border-slate-200 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer text-slate-700 font-medium"
+          >
+            {FONT_OPTIONS.map((font) => (
+              <option key={font.id} value={font.id}>
+                {font.name}
+              </option>
+            ))}
+          </select>
+          <Type className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
         </div>
       </section>
 

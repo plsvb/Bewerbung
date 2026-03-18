@@ -7,7 +7,7 @@ import { generatePDF } from './services/pdfService';
 import { Layout, Edit3, Sparkles, FileText, UserCheck, Files, Save, Download, Trash2, Clock } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [data, setData] = useState<ResumeData>(INITIAL_DATA);
+  const [data, setData] = useState<ResumeData>(ORCHESTER_DATA);
   const [savedVersions, setSavedVersions] = useState<SavedVersion[]>([]);
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
   const [isExporting, setIsExporting] = useState(false);
@@ -22,6 +22,14 @@ const App: React.FC = () => {
   const coverLetterRef = useRef<HTMLDivElement>(null);
   const coverPageRef = useRef<HTMLDivElement>(null);
   const cvPageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Expose a function to change font from console for testing/power users
+    (window as any).changeFont = (fontId: string) => {
+        setData(prev => ({ ...prev, selectedFontId: fontId as any }));
+        console.log(`Font changed to ${fontId}`);
+    };
+  }, []);
 
   useEffect(() => {
     setHasMounted(true);

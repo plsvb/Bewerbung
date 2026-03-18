@@ -136,16 +136,34 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
         <div ref={cvPageRef} className={`a4-page cv-page bg-white p-16 flex flex-col ${fontClass} text-slate-800`}>
           <div className="cv-content">
           <header className="text-center mb-12">
+            {/* Added: Photo and Summary for Classic */}
+            <div className="flex justify-center mb-8">
+               {data.personalInfo.photo && (
+                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-100 cv-photo mb-2">
+                   <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
+                 </div>
+               )}
+            </div>
             <h1 className={`text-4xl font-black uppercase tracking-[0.2em] mb-4 ${accentColor}`}>
               {data.personalInfo.fullName}
             </h1>
             <div className="h-px w-24 bg-slate-200 mx-auto mb-4"></div>
             <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">{data.personalInfo.jobTitle}</p>
-            <div className="flex justify-center gap-6 text-[10px] uppercase font-bold text-slate-500">
+            <div className="flex justify-center flex-wrap gap-6 text-[10px] uppercase font-bold text-slate-500">
               <span className="flex items-center gap-1"><Mail size={12} className={accentColor}/> {data.personalInfo.email}</span>
               <span className="flex items-center gap-1"><Phone size={12} className={accentColor}/> {data.personalInfo.phone}</span>
               <span className="flex items-center gap-1"><MapPin size={12} className={accentColor}/> {data.personalInfo.address}</span>
+              {data.personalInfo.website && (
+                  <span className="flex items-center gap-1">
+                     {data.personalInfo.website.replace(/^https?:\/\//, '')}
+                  </span>
+              )}
             </div>
+            {data.personalInfo.summary && (
+              <p className="mt-6 text-xs text-slate-500 max-w-lg mx-auto leading-relaxed italic">
+                {data.personalInfo.summary}
+              </p>
+            )}
           </header>
 
           <main className="space-y-10">
@@ -195,6 +213,20 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                 </div>
               </section>
             </div>
+            
+            {(data.languages.length > 0) && (
+              <section className="mt-8 border-t border-slate-100 pt-6">
+                 <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] border-b pb-1 mb-4 ${accentColor}`}>Sprachen</h3>
+                 <div className="grid grid-cols-2 gap-4">
+                    {data.languages.map((l) => (
+                       <div key={l.id} className="flex justify-between text-[10px]">
+                          <span className="font-bold uppercase">{l.name}</span>
+                          <span className="text-slate-500">{getLanguageLevelLabel(l.level)}</span>
+                       </div>
+                    ))}
+                 </div>
+              </section>
+            )}
 
             {(strengths.length > 0 || additionalSkills.length > 0) && (
               <div className="grid grid-cols-2 gap-12">
@@ -229,16 +261,31 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                 <h1 className="text-5xl font-black tracking-tighter uppercase mb-2 leading-none">{data.personalInfo.fullName}</h1>
                 <p className={`text-sm font-bold tracking-[0.4em] uppercase opacity-70`}>{data.personalInfo.jobTitle}</p>
               </div>
-              <div className="text-[10px] text-right font-bold uppercase tracking-widest space-y-1 opacity-60">
-                <p>{data.personalInfo.email}</p>
-                <p>{data.personalInfo.phone}</p>
-                <p>{data.personalInfo.address}</p>
+              
+              <div className="flex flex-col items-end gap-4">
+                  {data.personalInfo.photo && (
+                     <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-white/20 cv-photo mb-2">
+                        <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
+                     </div>
+                  )}
+                  <div className="text-[10px] text-right font-bold uppercase tracking-widest space-y-1 opacity-60">
+                    <p>{data.personalInfo.email}</p>
+                    <p>{data.personalInfo.phone}</p>
+                    <p>{data.personalInfo.address}</p>
+                    {data.personalInfo.website && <p>{data.personalInfo.website.replace(/^https?:\/\//, '')}</p>}
+                  </div>
               </div>
             </div>
           </header>
 
           <main className="flex-1 p-12 grid grid-cols-12 gap-12">
             <div className="col-span-8 space-y-12">
+               {data.personalInfo.summary && (
+                  <div className="text-sm text-slate-600 leading-relaxed italic border-l-4 border-slate-100 pl-4 py-1">
+                     {data.personalInfo.summary}
+                  </div>
+               )}
+
                <section>
                   <h2 className={`text-xs font-black uppercase tracking-[0.3em] mb-6 flex items-center gap-4 text-slate-900`}>
                     <Briefcase size={16} className={accentColor}/> Erfahrung
@@ -293,6 +340,20 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                     ))}
                   </div>
                </section>
+               
+               {data.languages.length > 0 && (
+                 <section>
+                   <h2 className={`text-xs font-black uppercase tracking-[0.3em] mb-6 text-slate-900`}>Sprachen</h2>
+                   <div className="space-y-3">
+                     {data.languages.map(l => (
+                       <div key={l.id} className="text-[10px]">
+                         <span className="font-bold uppercase block">{l.name}</span>
+                         <span className="text-slate-500 text-[9px]">{getLanguageLevelLabel(l.level)}</span>
+                       </div>
+                     ))}
+                   </div>
+                 </section>
+               )}
 
                {strengths.length > 0 && (
                  <section>
@@ -319,17 +380,33 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
       return (
         <div ref={cvPageRef} className={`a4-page cv-page bg-white p-14 flex flex-col ${fontClass} text-slate-800`}>
           <div className="cv-content">
-          <header className="mb-10">
-            <h1 className={`text-3xl font-black tracking-tight ${accentColor}`}>{data.personalInfo.fullName}</h1>
-            <p className="text-sm font-bold text-slate-400 tracking-widest uppercase mt-1">{data.personalInfo.jobTitle}</p>
-            <div className="mt-4 flex flex-wrap gap-4 text-[10px] font-bold text-slate-500">
-              <span className="flex items-center gap-1"><Mail size={12} className={accentColor}/> {data.personalInfo.email}</span>
-              <span className="flex items-center gap-1"><Phone size={12} className={accentColor}/> {data.personalInfo.phone}</span>
-              <span className="flex items-center gap-1"><MapPin size={12} className={accentColor}/> {data.personalInfo.address}</span>
+          <header className="mb-10 flex justify-between items-start">
+            <div className="flex-1">
+              <h1 className={`text-3xl font-black tracking-tight ${accentColor}`}>{data.personalInfo.fullName}</h1>
+              <p className="text-sm font-bold text-slate-400 tracking-widest uppercase mt-1">{data.personalInfo.jobTitle}</p>
+              <div className="mt-4 flex flex-col gap-1 text-[10px] font-bold text-slate-500">
+                <span className="flex items-center gap-1"><Mail size={12} className={accentColor}/> {data.personalInfo.email}</span>
+                <span className="flex items-center gap-1"><Phone size={12} className={accentColor}/> {data.personalInfo.phone}</span>
+                <span className="flex items-center gap-1"><MapPin size={12} className={accentColor}/> {data.personalInfo.address}</span>
+                {data.personalInfo.website && (
+                  <span className="flex items-center gap-1"><div className="w-3 h-3"></div> {data.personalInfo.website.replace(/^https?:\/\//, '')}</span>
+                )}
+              </div>
             </div>
+             {data.personalInfo.photo && (
+               <div className="w-24 h-24 rounded-full overflow-hidden grayscale opacity-90 border-2 border-slate-50 cv-photo">
+                  <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
+               </div>
+             )}
           </header>
 
           <main className="space-y-8">
+            {data.personalInfo.summary && (
+               <div className="text-xs text-slate-500 leading-relaxed italic border-l-2 border-slate-100 pl-4 py-1 max-w-2xl">
+                  {data.personalInfo.summary}
+               </div>
+            )}
+
             <section>
               <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] mb-5 ${accentColor}`}>Berufserfahrung</h3>
               <div className="space-y-6">
@@ -361,14 +438,27 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               </section>
 
               <section>
-                <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 ${accentColor}`}>Fähigkeiten</h3>
-                <div className="space-y-3">
-                  {data.skills.map((skill) => (
-                    <div key={skill.id} className="flex items-center justify-between text-[10px] font-bold uppercase">
-                      <span>{skill.name}</span>
-                      <span className={accentColor}>{skill.level}/5</span>
-                    </div>
-                  ))}
+                <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] mb-4 ${accentColor}`}>Fähigkeiten & Sprachen</h3>
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    {data.skills.map((skill) => (
+                      <div key={skill.id} className="flex items-center justify-between text-[10px] font-bold uppercase">
+                        <span>{skill.name}</span>
+                        <span className={accentColor}>{skill.level}/5</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {data.languages.length > 0 && (
+                     <div className="pt-4 border-t border-slate-50 space-y-2">
+                       {data.languages.map((l) => (
+                         <div key={l.id} className="flex items-center justify-between text-[10px]">
+                           <span className="font-bold uppercase">{l.name}</span>
+                           <span className="text-slate-400 text-[9px]">{getLanguageLevelLabel(l.level)}</span>
+                         </div>
+                       ))}
+                     </div>
+                  )}
                 </div>
               </section>
             </div>
@@ -405,6 +495,12 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               <h1 className={`text-3xl font-black tracking-tight ${accentColor}`}>{data.personalInfo.fullName}</h1>
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mt-1">{data.personalInfo.jobTitle}</p>
             </header>
+
+            {data.personalInfo.summary && (
+              <div className="text-xs text-slate-500 leading-relaxed italic border-l-2 border-slate-100 pl-4 py-1 max-w-xl">
+                 {data.personalInfo.summary}
+              </div>
+            )}
 
             <section>
               <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-6 flex items-center gap-4`}>
@@ -464,12 +560,21 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
           </div>
 
           <aside className={`w-1/3 ${sidebarBg} ${sidebarTextColor} p-10 space-y-10`}>
+            {data.personalInfo.photo && (
+               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/10 mx-auto cv-photo">
+                  <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
+               </div>
+            )}
+            
             <section>
               <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${accentColor}`}>Kontakt</h3>
               <div className="space-y-3 text-xs">
                 <div className="flex gap-3 items-center opacity-90"><Mail size={14}/> <span>{data.personalInfo.email}</span></div>
                 <div className="flex gap-3 items-center opacity-90"><Phone size={14}/> <span>{data.personalInfo.phone}</span></div>
                 <div className="flex gap-3 items-start opacity-90"><MapPin size={14} className="shrink-0 mt-0.5"/> <span>{data.personalInfo.address}</span></div>
+                {data.personalInfo.website && (
+                  <div className="flex gap-3 items-start opacity-90 mt-1"><span className="w-3.5 h-3.5"></span><span>{data.personalInfo.website.replace(/^https?:\/\//, '')}</span></div>
+                )}
               </div>
             </section>
 
@@ -517,15 +622,31 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               <h1 className={`text-3xl font-black tracking-tight ${accentColor}`}>{data.personalInfo.fullName}</h1>
               <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mt-1">{data.personalInfo.jobTitle}</p>
             </div>
-            <div className="text-[10px] font-bold text-slate-500 space-y-1 text-right">
-              <p>{data.personalInfo.email}</p>
-              <p>{data.personalInfo.phone}</p>
-              <p>{data.personalInfo.address}</p>
+            
+            <div className="flex items-center gap-6">
+               <div className="text-[10px] font-bold text-slate-500 space-y-1 text-right">
+                 <p>{data.personalInfo.email}</p>
+                 <p>{data.personalInfo.phone}</p>
+                 <p>{data.personalInfo.address}</p>
+                 {data.personalInfo.website && <p>{data.personalInfo.website.replace(/^https?:\/\//, '')}</p>}
+               </div>
+               
+               {data.personalInfo.photo && (
+                 <div className="w-16 h-16 rounded-md overflow-hidden border border-slate-200 cv-photo">
+                    <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
+                 </div>
+               )}
             </div>
           </header>
 
           <main className="grid grid-cols-12 gap-10">
             <section className="col-span-7 space-y-6">
+              {data.personalInfo.summary && (
+                  <div className="text-xs text-slate-500 leading-relaxed italic border-l-2 border-slate-100 pl-3">
+                     {data.personalInfo.summary}
+                  </div>
+               )}
+            
               <div>
                 <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] mb-3 ${accentColor}`}>Berufserfahrung</h3>
                 <div className="space-y-6">
@@ -567,6 +688,21 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                   ))}
                 </div>
               </div>
+
+              {data.languages.length > 0 && (
+                <div>
+                   <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] mb-3 ${accentColor}`}>Sprachen</h3>
+                   <div className="space-y-2">
+                      {data.languages.map(l => (
+                         <div key={l.id} className="flex items-center justify-between text-[10px] uppercase font-bold">
+                            <span>{l.name}</span>
+                            <span className="text-slate-400 text-[9px]">{getLanguageLevelLabel(l.level)}</span>
+                         </div>
+                      ))}
+                   </div>
+                </div>
+              )}
+
               {strengths.length > 0 && (
                 <div>
                   <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] mb-3 ${accentColor}`}>Arbeitsweise & Stärken</h3>
@@ -593,6 +729,11 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
         {/* Sidebar */}
         <div className={`w-1/3 ${sidebarBg} ${sidebarTextColor} p-10 flex flex-col gap-10`}>
           <div className="text-center pb-8 border-b border-white/10">
+            {data.personalInfo.photo && (
+               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 mx-auto cv-photo mb-6">
+                  <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
+               </div>
+            )}
             <h2 className="text-xl font-black uppercase tracking-tighter leading-none">{data.personalInfo.fullName}</h2>
             <p className={`text-[10px] font-bold uppercase tracking-widest mt-2 ${accentColor}`}>{data.personalInfo.jobTitle}</p>
           </div>
@@ -604,6 +745,9 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                 <div className="flex gap-3 items-center opacity-80"><Mail size={14}/> <span>{data.personalInfo.email}</span></div>
                 <div className="flex gap-3 items-center opacity-80"><Phone size={14}/> <span>{data.personalInfo.phone}</span></div>
                 <div className="flex gap-3 items-start opacity-80"><MapPin size={14} className="shrink-0 mt-0.5"/> <span>{data.personalInfo.address}</span></div>
+                {data.personalInfo.website && (
+                  <div className="flex gap-3 items-start opacity-80"><span className="w-3.5 h-3.5"></span><span>{data.personalInfo.website.replace(/^https?:\/\//, '')}</span></div>
+                )}
               </div>
             </section>
 
@@ -640,6 +784,12 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
 
         {/* Content */}
         <div className="flex-1 p-12 bg-white space-y-12">
+           {data.personalInfo.summary && (
+              <div className="text-sm text-slate-500 leading-relaxed italic border-l-4 border-slate-100 pl-6 py-2">
+                 {data.personalInfo.summary}
+              </div>
+           )}
+
           <section>
             <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-8 flex items-center gap-4">
               Werdegang <span className="flex-1 h-px bg-slate-50"></span>

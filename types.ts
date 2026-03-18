@@ -461,7 +461,7 @@ export const ORCHESTER_DATA: ResumeData = {
     {
       id: "1",
       school: "HANDWERKSKAMMER",
-      degree: "Friseurmeister (Meisterbrief)",
+      degree: "Ausbildung zum Friseur",
       period: ""
     },
     {
