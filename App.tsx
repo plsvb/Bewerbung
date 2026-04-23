@@ -37,7 +37,24 @@ const App: React.FC = () => {
     try {
       const rawVersions = localStorage.getItem('cv-master-versions');
       if (rawVersions) {
-        setSavedVersions(JSON.parse(rawVersions));
+        const migrateAddr = (d: any) => {
+          const pi = d?.personalInfo;
+          if (pi?.address && !pi?.street && !pi?.zip && !pi?.city) {
+            const addr: string = pi.address;
+            const commaIdx = addr.lastIndexOf(',');
+            if (commaIdx !== -1) {
+              pi.street = addr.substring(0, commaIdx).trim();
+              const rest = addr.substring(commaIdx + 1).trim();
+              const spIdx = rest.indexOf(' ');
+              if (spIdx !== -1) { pi.zip = rest.substring(0, spIdx).trim(); pi.city = rest.substring(spIdx + 1).trim(); }
+              else { pi.city = rest; }
+            } else { pi.city = addr; }
+            delete pi.address;
+          }
+          return d;
+        };
+        const versions = JSON.parse(rawVersions).map((v: any) => ({ ...v, data: migrateAddr(v.data) }));
+        setSavedVersions(versions);
       } else {
          const defaultVersions: SavedVersion[] = [
           {
@@ -154,6 +171,28 @@ const App: React.FC = () => {
           level: 3
         })) as any;
       }
+      // Migration: altes address-Feld auf street/zip/city aufteilen
+      const pi = merged.personalInfo as any;
+      if (pi.address && !pi.street && !pi.zip && !pi.city) {
+        const addr: string = pi.address;
+        const commaIdx = addr.lastIndexOf(',');
+        if (commaIdx !== -1) {
+          pi.street = addr.substring(0, commaIdx).trim();
+          const rest = addr.substring(commaIdx + 1).trim();
+          const spaceIdx = rest.indexOf(' ');
+          if (spaceIdx !== -1) {
+            pi.zip = rest.substring(0, spaceIdx).trim();
+            pi.city = rest.substring(spaceIdx + 1).trim();
+          } else {
+            pi.city = rest;
+          }
+        } else {
+          pi.city = addr;
+        }
+        delete pi.address;
+        merged.personalInfo = pi;
+      }
+
       if (!merged.coverLetter?.date) {
         merged.coverLetter = { ...merged.coverLetter, date: today };
       }

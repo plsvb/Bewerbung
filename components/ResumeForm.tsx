@@ -518,12 +518,33 @@ Zusatzkenntnisse: ${additionalSkillsText}`;
                     />
                 </div>
                 <div className="md:col-span-2 space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase">Adresse</label>
+                    <label className="text-[10px] font-bold text-slate-400 uppercase">Straße &amp; Hausnummer</label>
                     <input 
                         type="text" 
-                        value={data.personalInfo.address}
-                        onChange={(e) => updatePersonalInfo('address', e.target.value)}
-                      data-tour="address"
+                        value={data.personalInfo.street}
+                        onChange={(e) => updatePersonalInfo('street', e.target.value)}
+                        data-tour="address"
+                        placeholder="z.B. Musterstraße 1"
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                    />
+                </div>
+                <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase">PLZ</label>
+                    <input 
+                        type="text" 
+                        value={data.personalInfo.zip}
+                        onChange={(e) => updatePersonalInfo('zip', e.target.value)}
+                        placeholder="z.B. 96047"
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                    />
+                </div>
+                <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase">Ort</label>
+                    <input 
+                        type="text" 
+                        value={data.personalInfo.city}
+                        onChange={(e) => updatePersonalInfo('city', e.target.value)}
+                        placeholder="z.B. Bamberg"
                         className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                     />
                 </div>

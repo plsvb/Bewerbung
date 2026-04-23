@@ -152,7 +152,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
             <div className="flex justify-center flex-wrap gap-6 text-[10px] uppercase font-bold text-slate-500">
               <span className="flex items-center gap-1"><Mail size={12} className={accentColor}/> {data.personalInfo.email}</span>
               <span className="flex items-center gap-1"><Phone size={12} className={accentColor}/> {data.personalInfo.phone}</span>
-              <span className="flex items-center gap-1"><MapPin size={12} className={accentColor}/> {data.personalInfo.address}</span>
+              <span className="flex items-center gap-1"><MapPin size={12} className={accentColor}/> {[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span>
               {data.personalInfo.website && (
                   <span className="flex items-center gap-1">
                      {data.personalInfo.website.replace(/^https?:\/\//, '')}
@@ -271,7 +271,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                   <div className="text-[10px] text-right font-bold uppercase tracking-widest space-y-1 opacity-60">
                     <p>{data.personalInfo.email}</p>
                     <p>{data.personalInfo.phone}</p>
-                    <p>{data.personalInfo.address}</p>
+                    <p>{[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</p>
                     {data.personalInfo.website && <p>{data.personalInfo.website.replace(/^https?:\/\//, '')}</p>}
                   </div>
               </div>
@@ -387,7 +387,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               <div className="mt-4 flex flex-col gap-1 text-[10px] font-bold text-slate-500">
                 <span className="flex items-center gap-1"><Mail size={12} className={accentColor}/> {data.personalInfo.email}</span>
                 <span className="flex items-center gap-1"><Phone size={12} className={accentColor}/> {data.personalInfo.phone}</span>
-                <span className="flex items-center gap-1"><MapPin size={12} className={accentColor}/> {data.personalInfo.address}</span>
+                <span className="flex items-center gap-1"><MapPin size={12} className={accentColor}/> {[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span>
                 {data.personalInfo.website && (
                   <span className="flex items-center gap-1"><div className="w-3 h-3"></div> {data.personalInfo.website.replace(/^https?:\/\//, '')}</span>
                 )}
@@ -571,7 +571,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               <div className="space-y-3 text-xs">
                 <div className="flex gap-3 items-center opacity-90"><Mail size={14}/> <span>{data.personalInfo.email}</span></div>
                 <div className="flex gap-3 items-center opacity-90"><Phone size={14}/> <span>{data.personalInfo.phone}</span></div>
-                <div className="flex gap-3 items-start opacity-90"><MapPin size={14} className="shrink-0 mt-0.5"/> <span>{data.personalInfo.address}</span></div>
+                <div className="flex gap-3 items-start opacity-90"><MapPin size={14} className="shrink-0 mt-0.5"/> <span>{[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span></div>
                 {data.personalInfo.website && (
                   <div className="flex gap-3 items-start opacity-90 mt-1"><span className="w-3.5 h-3.5"></span><span>{data.personalInfo.website.replace(/^https?:\/\//, '')}</span></div>
                 )}
@@ -627,7 +627,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                <div className="text-[10px] font-bold text-slate-500 space-y-1 text-right">
                  <p>{data.personalInfo.email}</p>
                  <p>{data.personalInfo.phone}</p>
-                 <p>{data.personalInfo.address}</p>
+                 <p>{[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</p>
                  {data.personalInfo.website && <p>{data.personalInfo.website.replace(/^https?:\/\//, '')}</p>}
                </div>
                
@@ -744,7 +744,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               <div className="space-y-4 text-xs">
                 <div className="flex gap-3 items-center opacity-80"><Mail size={14}/> <span>{data.personalInfo.email}</span></div>
                 <div className="flex gap-3 items-center opacity-80"><Phone size={14}/> <span>{data.personalInfo.phone}</span></div>
-                <div className="flex gap-3 items-start opacity-80"><MapPin size={14} className="shrink-0 mt-0.5"/> <span>{data.personalInfo.address}</span></div>
+                <div className="flex gap-3 items-start opacity-80"><MapPin size={14} className="shrink-0 mt-0.5"/> <span>{[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span></div>
                 {data.personalInfo.website && (
                   <div className="flex gap-3 items-start opacity-80"><span className="w-3.5 h-3.5"></span><span>{data.personalInfo.website.replace(/^https?:\/\//, '')}</span></div>
                 )}
@@ -859,7 +859,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
         <div className="grid grid-cols-12 gap-10 mb-12">
           <div className="col-span-4 text-[10px] space-y-2 border-r pr-6">
             <p className="font-bold uppercase">Absender</p>
-            <p>{data.personalInfo.address}</p>
+            <p>{[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</p>
             <p>{data.personalInfo.phone}</p>
             <p className={accentColor}>{data.personalInfo.email}</p>
           </div>
@@ -911,7 +911,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                   <h2 className="text-2xl font-black leading-tight uppercase tracking-tight">{data.personalInfo.jobTitle}</h2>
               </div>
               <div className="z-10 space-y-6 text-[10px] uppercase font-bold tracking-widest opacity-80 w-full">
-                  <div className="flex items-center gap-4"><MapPin size={16} className={accentColor}/> <span>{data.personalInfo.address}</span></div>
+                  <div className="flex items-center gap-4"><MapPin size={16} className={accentColor}/> <span>{[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</span></div>
                   <div className="flex items-center gap-4"><Mail size={16} className={accentColor}/> <span>{data.personalInfo.email}</span></div>
               </div>
           </div>

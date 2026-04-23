@@ -109,7 +109,9 @@ export interface ResumeData {
     jobTitle: string;
     email: string;
     phone: string;
-    address: string;
+    street: string;
+    zip: string;
+    city: string;
     website: string;
     photo: string;
     summary: string;
@@ -149,7 +151,9 @@ export const INITIAL_DATA: ResumeData = {
     jobTitle: "",
     email: "",
     phone: "",
-    address: "",
+    street: "",
+    zip: "",
+    city: "",
     website: "",
     photo: "",
     summary: ""
@@ -178,7 +182,9 @@ export const HAUSMEISTER_DATA: ResumeData = {
     jobTitle: "Hausmeister / Technischer Mitarbeiter",
     email: "erikvonbrandt@gmail.com",
     phone: "09542 4520366",
-    address: "Pfarrer-Kropfeld-Straße 27, 96110 Scheßlitz",
+    street: "Pfarrer-Kropfeld-Straße 27",
+    zip: "96110",
+    city: "Scheßlitz",
     website: "",
     photo: "",
     summary: "Zuverlässiger, handwerklich vielseitiger Facharbeiter mit langjähriger Erfahrung in Gebäudeinstandhaltung, Reparatur und Pflege von Außenanlagen sowie technischer Betreuung von Immobilien. Über 25 Jahre selbstständige Tätigkeit mit hoher Eigenverantwortung in Handwerk, Bau, Restaurierung und Objektpflege."
@@ -250,7 +256,9 @@ export const PAEDAGOGE_DATA: ResumeData = {
     jobTitle: "Sozial- und Kulturpädagoge / Künstler",
     email: "erikvonbrandt@gmail.com",
     phone: "09542 4520366",
-    address: "Pfarrer-Kropfeld-Straße 27, 96110 Scheßlitz",
+    street: "Pfarrer-Kropfeld-Straße 27",
+    zip: "96110",
+    city: "Scheßlitz",
     website: "",
     photo: "",
     summary: "Sozial- und kulturpädagogisch ausgebildeter Künstler und Bildhauer mit über 25 Jahren Berufserfahrung in der kreativen Bildungsarbeit, Seminarleitung und projektbezogenen Arbeit mit Kindern, Jugendlichen und Erwachsenen. Langjährige selbstständige Tätigkeit an der Schnittstelle von Kunst, Handwerk, Denkmalpflege und Pädagogik. Erfahren in der Konzeption und Durchführung von praxisnahen, handlungsorientierten Bildungs- und Kulturprojekten in Schulen, Kindergärten, Jugendhilfe, Erwachsenenbildung sowie im musealen und öffentlichen Raum. Ausgeprägte Fähigkeit zur Anleitung von Gruppen, zur individuellen Begleitung sowie zur Vermittlung komplexer Inhalte über kreative und niedrigschwellige Methoden."
@@ -319,7 +327,9 @@ const OLD_INITIAL_DATA: ResumeData = {
     jobTitle: "Sozial- und Kulturpädagoge / Künstler",
     email: "erikvonbrandt@gmail.com",
     phone: "09542 4520366",
-    address: "Pfarrer-Kropfeld-Straße 27, 96110 Scheßlitz",
+    street: "Pfarrer-Kropfeld-Straße 27",
+    zip: "96110",
+    city: "Scheßlitz",
     website: "",
     photo: "",
     summary: "Sozial- und kulturpädagogisch ausgebildeter Künstler und Bildhauer mit über 25 Jahren Berufserfahrung in der kreativen Bildungsarbeit, Seminarleitung und projektbezogenen Arbeit mit Kindern, Jugendlichen und Erwachsenen. Langjährige selbstständige Tätigkeit an der Schnittstelle von Kunst, Handwerk, Denkmalpflege und Pädagogik. Erfahren in der Konzeption und Durchführung von praxisnahen, handlungsorientierten Bildungs- und Kulturprojekten in Schulen, Kindergärten, Jugendhilfe, Erwachsenenbildung sowie im musealen und öffentlichen Raum. Ausgeprägte Fähigkeit zur Anleitung von Gruppen, zur individuellen Begleitung sowie zur Vermittlung komplexer Inhalte über kreative und niedrigschwellige Methoden. Derzeit auf der Suche nach einer Teilzeitanstellung im sozial- oder kulturpädagogischen Bereich, mit Fokus auf strukturierte, nachhaltige Arbeitsfelder und klare Rahmenbedingungen."
@@ -416,7 +426,9 @@ export const ORCHESTER_DATA: ResumeData = {
     jobTitle: "MITARBEITER FÜR BÜHNENAUFBAU / LOGISTIK",
     email: "gojabo@freenet.de",
     phone: "01722327059",
-    address: "Herzog-Max-Straße 7, 96047 Bamberg",
+    street: "Herzog-Max-Straße 7",
+    zip: "96047",
+    city: "Bamberg",
     website: "",
     photo: "",
     summary: "Erfahrener Produktionsmitarbeiter mit ausgeprägtem handwerklichem Geschick und Logistik-Erfahrung bei nationalen und internationalen Produktionen. Routiniert im Auf- und Abbau von Equipment, stressresistent und teamfähig. Durch langjährige Tätigkeit bei Film- und TV-Reihenproduktionen bestens vertraut mit flexiblen Arbeitszeiten, Reisetätigkeit und der Arbeit hinter den Kulissen."
@@ -510,7 +522,9 @@ export const FILM_DATA: ResumeData = {
     jobTitle: "Set-Aufnahmeleiter / Produktionsfahrer",
     email: "",
     phone: "",
-    address: "München, Deutschland",
+    street: "",
+    zip: "",
+    city: "München",
     website: "",
     photo: "",
     summary: "Erfahrener Produktionsmitarbeiter mit Schwerpunkt auf Set-Aufnahmeleitung und Produktionsfahren bei nationalen und internationalen Film- und TV-Produktionen. Flexibel, zuverlässig und lösungsorientiert mit umfassender Erfahrung bei Reihenproduktionen wie der ZDF-Reihe 'Frühling'."
