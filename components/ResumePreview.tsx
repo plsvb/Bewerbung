@@ -136,14 +136,6 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
         <div ref={cvPageRef} className={`a4-page cv-page bg-white p-16 flex flex-col ${fontClass} text-slate-800`}>
           <div className="cv-content">
           <header className="text-center mb-12">
-            {/* Added: Photo and Summary for Classic */}
-            <div className="flex justify-center mb-8">
-               {data.personalInfo.photo && (
-                 <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-100 cv-photo mb-2">
-                   <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
-                 </div>
-               )}
-            </div>
             <h1 className={`text-4xl font-black uppercase tracking-[0.2em] mb-4 ${accentColor}`}>
               {data.personalInfo.fullName}
             </h1>
@@ -159,11 +151,6 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                   </span>
               )}
             </div>
-            {data.personalInfo.summary && (
-              <p className="mt-6 text-xs text-slate-500 max-w-lg mx-auto leading-relaxed italic">
-                {data.personalInfo.summary}
-              </p>
-            )}
           </header>
 
           <main className="space-y-10">
@@ -263,11 +250,6 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               </div>
               
               <div className="flex flex-col items-end gap-4">
-                  {data.personalInfo.photo && (
-                     <div className="w-20 h-20 rounded-lg overflow-hidden border-2 border-white/20 cv-photo mb-2">
-                        <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
-                     </div>
-                  )}
                   <div className="text-[10px] text-right font-bold uppercase tracking-widest space-y-1 opacity-60">
                     <p>{data.personalInfo.email}</p>
                     <p>{data.personalInfo.phone}</p>
@@ -280,12 +262,6 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
 
           <main className="flex-1 p-12 grid grid-cols-12 gap-12">
             <div className="col-span-8 space-y-12">
-               {data.personalInfo.summary && (
-                  <div className="text-sm text-slate-600 leading-relaxed italic border-l-4 border-slate-100 pl-4 py-1">
-                     {data.personalInfo.summary}
-                  </div>
-               )}
-
                <section>
                   <h2 className={`text-xs font-black uppercase tracking-[0.3em] mb-6 flex items-center gap-4 text-slate-900`}>
                     <Briefcase size={16} className={accentColor}/> Erfahrung
@@ -393,20 +369,9 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                 )}
               </div>
             </div>
-             {data.personalInfo.photo && (
-               <div className="w-24 h-24 rounded-full overflow-hidden grayscale opacity-90 border-2 border-slate-50 cv-photo">
-                  <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
-               </div>
-             )}
           </header>
 
           <main className="space-y-8">
-            {data.personalInfo.summary && (
-               <div className="text-xs text-slate-500 leading-relaxed italic border-l-2 border-slate-100 pl-4 py-1 max-w-2xl">
-                  {data.personalInfo.summary}
-               </div>
-            )}
-
             <section>
               <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] mb-5 ${accentColor}`}>Berufserfahrung</h3>
               <div className="space-y-6">
@@ -496,12 +461,6 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mt-1">{data.personalInfo.jobTitle}</p>
             </header>
 
-            {data.personalInfo.summary && (
-              <div className="text-xs text-slate-500 leading-relaxed italic border-l-2 border-slate-100 pl-4 py-1 max-w-xl">
-                 {data.personalInfo.summary}
-              </div>
-            )}
-
             <section>
               <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-6 flex items-center gap-4`}>
                 Werdegang <span className="flex-1 h-px bg-slate-50"></span>
@@ -559,13 +518,7 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
             )}
           </div>
 
-          <aside className={`w-1/3 ${sidebarBg} ${sidebarTextColor} p-10 space-y-10`}>
-            {data.personalInfo.photo && (
-               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/10 mx-auto cv-photo">
-                  <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
-               </div>
-            )}
-            
+           <aside className={`w-1/3 ${sidebarBg} ${sidebarTextColor} p-10 space-y-10`}>
             <section>
               <h3 className={`text-[10px] font-black uppercase tracking-[0.2em] mb-4 ${accentColor}`}>Kontakt</h3>
               <div className="space-y-3 text-xs">
@@ -630,23 +583,11 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                  <p>{[data.personalInfo.street, [data.personalInfo.zip, data.personalInfo.city].filter(Boolean).join(" ")].filter(Boolean).join(", ")}</p>
                  {data.personalInfo.website && <p>{data.personalInfo.website.replace(/^https?:\/\//, '')}</p>}
                </div>
-               
-               {data.personalInfo.photo && (
-                 <div className="w-16 h-16 rounded-md overflow-hidden border border-slate-200 cv-photo">
-                    <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
-                 </div>
-               )}
             </div>
           </header>
 
           <main className="grid grid-cols-12 gap-10">
             <section className="col-span-7 space-y-6">
-              {data.personalInfo.summary && (
-                  <div className="text-xs text-slate-500 leading-relaxed italic border-l-2 border-slate-100 pl-3">
-                     {data.personalInfo.summary}
-                  </div>
-               )}
-            
               <div>
                 <h3 className={`text-[10px] font-black uppercase tracking-[0.3em] mb-3 ${accentColor}`}>Berufserfahrung</h3>
                 <div className="space-y-6">
@@ -729,11 +670,6 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
         {/* Sidebar */}
         <div className={`w-1/3 ${sidebarBg} ${sidebarTextColor} p-10 flex flex-col gap-10`}>
           <div className="text-center pb-8 border-b border-white/10">
-            {data.personalInfo.photo && (
-               <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/20 mx-auto cv-photo mb-6">
-                  <img src={data.personalInfo.photo} className="w-full h-full object-cover" />
-               </div>
-            )}
             <h2 className="text-xl font-black uppercase tracking-tighter leading-none">{data.personalInfo.fullName}</h2>
             <p className={`text-[10px] font-bold uppercase tracking-widest mt-2 ${accentColor}`}>{data.personalInfo.jobTitle}</p>
           </div>
@@ -784,12 +720,6 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
 
         {/* Content */}
         <div className="flex-1 p-12 bg-white space-y-12">
-           {data.personalInfo.summary && (
-              <div className="text-sm text-slate-500 leading-relaxed italic border-l-4 border-slate-100 pl-6 py-2">
-                 {data.personalInfo.summary}
-              </div>
-           )}
-
           <section>
             <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 mb-8 flex items-center gap-4">
               Werdegang <span className="flex-1 h-px bg-slate-50"></span>
@@ -899,9 +829,11 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
               <div className="w-full h-full bg-slate-100 flex items-center justify-center"><User size={80} className="text-slate-200"/></div>
             )}
           </div>
-          <p className="text-xs text-slate-500 leading-relaxed text-center max-w-md">
-            {data.personalInfo.summary}
-          </p>
+          {data.personalInfo.summary && (
+            <p className="text-xs text-slate-500 leading-relaxed text-center max-w-md">
+              {data.personalInfo.summary}
+            </p>
+          )}
         </div>
       ) : (
         <div ref={coverPageRef} className={`a4-page relative flex text-slate-800 overflow-hidden bg-white ${fontClass}`}>
@@ -933,9 +865,11 @@ const ResumePreview: React.FC<Props> = ({ data, coverLetterRef, coverPageRef, cv
                   <div className="w-full h-full bg-slate-100 flex items-center justify-center"><User size={80} className="text-slate-200"/></div>
                 )}
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
-                {data.personalInfo.summary}
-              </p>
+              {data.personalInfo.summary && (
+                <p className="text-xs text-slate-500 leading-relaxed max-w-sm">
+                  {data.personalInfo.summary}
+                </p>
+              )}
           </div>
         </div>
       )}

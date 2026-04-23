@@ -188,6 +188,307 @@ Zusatzkenntnisse: ${additionalSkillsText}`;
     onChange({ ...data, selectedFontId: id });
   };
 
+  const RESTRICTED_EDITOR_MODE = true;
+
+  if (RESTRICTED_EDITOR_MODE) {
+    return (
+      <div className="space-y-8 p-6 bg-white rounded-xl shadow-sm pb-20">
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 mb-2 border-b pb-2">
+            <User className="text-blue-600" size={20} />
+            <h2 className="text-lg font-bold">Absenderdaten</h2>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-6 items-start">
+            <div className="relative group shrink-0">
+              <div className="w-32 h-32 rounded-2xl bg-slate-100 border-2 border-dashed border-slate-200 overflow-hidden flex items-center justify-center relative cv-photo">
+                {data.personalInfo.photo ? (
+                  <img
+                    src={data.personalInfo.photo}
+                    className="w-full h-full object-cover object-center"
+                    style={{ objectFit: 'cover', objectPosition: 'center', width: '100%', height: '100%', display: 'block' }}
+                    loading="eager"
+                    decoding="async"
+                  />
+                ) : (
+                  <Camera className="text-slate-300" size={32} />
+                )}
+                <input
+                  id="photoUploadRestricted"
+                  type="file"
+                  onChange={handlePhotoUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                  accept="image/*"
+                />
+              </div>
+              <label htmlFor="photoUploadRestricted" className="absolute -bottom-2 -right-2 bg-blue-600 text-white p-1.5 rounded-lg shadow-lg cursor-pointer">
+                <Plus size={14} />
+              </label>
+            </div>
+
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Vollständiger Name</label>
+                <input
+                  type="text"
+                  value={data.personalInfo.fullName}
+                  onChange={(e) => updatePersonalInfo('fullName', e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Position</label>
+                <input
+                  type="text"
+                  value={data.personalInfo.jobTitle}
+                  onChange={(e) => updatePersonalInfo('jobTitle', e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">E-Mail</label>
+                <input
+                  type="email"
+                  value={data.personalInfo.email}
+                  onChange={(e) => updatePersonalInfo('email', e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Telefon</label>
+                <input
+                  type="tel"
+                  value={data.personalInfo.phone}
+                  onChange={(e) => updatePersonalInfo('phone', e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                />
+              </div>
+              <div className="md:col-span-2 space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Straße & Hausnummer</label>
+                <input
+                  type="text"
+                  value={data.personalInfo.street}
+                  onChange={(e) => updatePersonalInfo('street', e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">PLZ</label>
+                <input
+                  type="text"
+                  value={data.personalInfo.zip}
+                  onChange={(e) => updatePersonalInfo('zip', e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-400 uppercase">Ort</label>
+                <input
+                  type="text"
+                  value={data.personalInfo.city}
+                  onChange={(e) => updatePersonalInfo('city', e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 mb-2 border-b pb-2">
+            <FileText className="text-blue-600" size={20} />
+            <h2 className="text-lg font-bold">Motivationsschreiben</h2>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-[10px] font-bold text-slate-400 uppercase">Kurzprofil / Zusammenfassung</label>
+            <textarea
+              rows={6}
+              value={data.personalInfo.summary}
+              onChange={(e) => updatePersonalInfo('summary', e.target.value)}
+              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase">Datum</label>
+              <input
+                type="text"
+                value={data.coverLetter.date}
+                onChange={(e) => updateCoverLetter('date', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase">Betreff</label>
+              <input
+                type="text"
+                value={data.coverLetter.subject}
+                onChange={(e) => updateCoverLetter('subject', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+              />
+            </div>
+            <div className="md:col-span-2 space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase">Empfängeranschrift</label>
+              <textarea
+                rows={4}
+                value={data.coverLetter.recipient}
+                onChange={(e) => updateCoverLetter('recipient', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"
+              />
+            </div>
+            <div className="md:col-span-2 space-y-1">
+              <label className="text-[10px] font-bold text-slate-400 uppercase">Text</label>
+              <textarea
+                rows={16}
+                value={data.coverLetter.text}
+                onChange={(e) => updateCoverLetter('text', e.target.value)}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none leading-relaxed"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 mb-4 border-b pb-2">
+            <Layout className="text-blue-600" size={20} />
+            <h2 className="text-lg font-bold">Dokument-Layout</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {LAYOUTS.map((layout) => (
+              <button
+                key={layout.id}
+                onClick={() => selectLayout(layout.id)}
+                className={`text-left p-3 rounded-xl border-2 transition-all ${
+                  data.selectedLayoutId === layout.id
+                    ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-100'
+                    : 'border-slate-100 hover:border-slate-200'
+                }`}
+              >
+                <div className="flex justify-between items-center mb-1">
+                  <span className={`text-xs font-bold uppercase tracking-tight ${data.selectedLayoutId === layout.id ? 'text-blue-700' : 'text-slate-700'}`}>
+                    {layout.name}
+                  </span>
+                  {data.selectedLayoutId === layout.id && <Check className="text-blue-600" size={14} />}
+                </div>
+                <p className="text-[10px] text-slate-400 leading-tight">{layout.description}</p>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 mb-4 border-b pb-2">
+            <Type className="text-blue-600" size={20} />
+            <h2 className="text-lg font-bold">Schriftart</h2>
+          </div>
+          <div className="relative">
+            <select
+              value={data.selectedFontId}
+              onChange={(e) => selectFont(e.target.value as FontId)}
+              className="w-full p-3 pl-10 bg-white border border-slate-200 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer text-slate-700 font-medium"
+            >
+              {FONT_OPTIONS.map((font) => (
+                <option key={font.id} value={font.id}>
+                  {font.name}
+                </option>
+              ))}
+            </select>
+            <Type className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" size={18} />
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 mb-4 border-b pb-2">
+            <Palette className="text-blue-600" size={20} />
+            <h2 className="text-lg font-bold">Farbschema</h2>
+          </div>
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+            {THEMES.map((theme) => (
+              <button
+                key={theme.id}
+                onClick={() => selectTheme(theme.id)}
+                className={`flex flex-col items-center p-2 rounded-xl border-2 transition-all ${
+                  data.selectedThemeId === theme.id
+                    ? 'border-blue-600 bg-blue-50'
+                    : 'border-slate-100'
+                }`}
+              >
+                <div
+                  className="w-full h-8 rounded-lg mb-1 flex items-center justify-center relative shadow-inner overflow-hidden"
+                  style={{ backgroundColor: theme.previewColor }}
+                >
+                  {data.selectedThemeId === theme.id && <Check className="text-white" size={12} />}
+                </div>
+                <span className={`text-[8px] font-bold uppercase truncate w-full text-center ${data.selectedThemeId === theme.id ? 'text-blue-700' : 'text-slate-500'}`}>
+                  {theme.name.split(' ')[0]}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-slate-700">Benutzerdefinierte Farben</h3>
+              {data.customColors && (
+                <button
+                  onClick={() => onChange({ ...data, customColors: undefined })}
+                  className="text-xs text-red-500 hover:text-red-700 font-bold"
+                >
+                  Zurücksetzen
+                </button>
+              )}
+            </div>
+
+            <div className="flex gap-6">
+              <label className="flex flex-col gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Primärfarbe (Text)</span>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={data.customColors?.primary || '#3b82f6'}
+                    onChange={(e) => onChange({
+                      ...data,
+                      customColors: {
+                        secondary: data.customColors?.secondary || '#1e293b',
+                        ...data.customColors,
+                        primary: e.target.value
+                      }
+                    })}
+                    className="w-10 h-10 rounded-lg cursor-pointer border-none p-0 bg-transparent"
+                  />
+                  <span className="text-xs font-mono text-slate-600 uppercase">{data.customColors?.primary || 'Standard'}</span>
+                </div>
+              </label>
+
+              <label className="flex flex-col gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Sekundärfarbe (Sidebar/Bg)</span>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="color"
+                    value={data.customColors?.secondary || '#1e293b'}
+                    onChange={(e) => onChange({
+                      ...data,
+                      customColors: {
+                        primary: data.customColors?.primary || '#3b82f6',
+                        ...data.customColors,
+                        secondary: e.target.value
+                      }
+                    })}
+                    className="w-10 h-10 rounded-lg cursor-pointer border-none p-0 bg-transparent"
+                  />
+                  <span className="text-xs font-mono text-slate-600 uppercase">{data.customColors?.secondary || 'Standard'}</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-10 p-6 bg-white rounded-xl shadow-sm pb-32">
         {/* Version Management */}

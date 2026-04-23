@@ -1,23 +1,18 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import { ResumeData, INITIAL_DATA, LAYOUTS, THEMES, SavedVersion, HAUSMEISTER_DATA, PAEDAGOGE_DATA, FILM_DATA, ORCHESTER_DATA } from './types';
+import React, { useState, useEffect, useRef } from 'react';
+import { ResumeData, INITIAL_DATA, LAYOUTS, THEMES, SavedVersion, PAEDAGOGE_DATA } from './types';
 import ResumeForm from './components/ResumeForm';
 import ResumePreview from './components/ResumePreview';
 import { generatePDF } from './services/pdfService';
-import { Layout, Edit3, Sparkles, FileText, UserCheck, Files, Save, Download, Trash2, Clock } from 'lucide-react';
+import { Layout, Edit3, Sparkles, FileText, UserCheck, Files, Save } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [data, setData] = useState<ResumeData>(ORCHESTER_DATA);
+  const [data, setData] = useState<ResumeData>(PAEDAGOGE_DATA);
   const [savedVersions, setSavedVersions] = useState<SavedVersion[]>([]);
+  const [selectedHeaderVersionId, setSelectedHeaderVersionId] = useState('');
   const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
   const [isExporting, setIsExporting] = useState(false);
-  const [tutorialStep, setTutorialStep] = useState(0);
-  const [showTutorial, setShowTutorial] = useState(true);
-  const [showTutorialIntro, setShowTutorialIntro] = useState(true);
-  const [tutorialRect, setTutorialRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
-  const [hasMounted, setHasMounted] = useState(false);
   const [hasLoadedData, setHasLoadedData] = useState(false);
-  const activeTourElementRef = useRef<HTMLElement | null>(null);
 
   const coverLetterRef = useRef<HTMLDivElement>(null);
   const coverPageRef = useRef<HTMLDivElement>(null);
@@ -32,8 +27,6 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setHasMounted(true);
-    setShowTutorialIntro(true);
     try {
       const rawVersions = localStorage.getItem('cv-master-versions');
       if (rawVersions) {
@@ -58,28 +51,10 @@ const App: React.FC = () => {
       } else {
          const defaultVersions: SavedVersion[] = [
           {
-            id: 'default-hausmeister',
-            name: 'Bewerbung Hausmeister',
-            timestamp: Date.now(),
-            data: HAUSMEISTER_DATA
-          },
-          {
             id: 'default-paedagoge',
             name: 'Bewerbung Sozialpädagoge',
             timestamp: Date.now(),
             data: PAEDAGOGE_DATA
-          },
-          {
-            id: 'default-film',
-            name: 'Bewerbung Film (Set-AL / Produktion)',
-            timestamp: Date.now(),
-            data: FILM_DATA
-          },
-          {
-            id: 'default-orchester',
-            name: 'Bewerbung Bamberger Symphoniker',
-            timestamp: Date.now(),
-            data: ORCHESTER_DATA
           }
         ];
         setSavedVersions(defaultVersions);
@@ -117,6 +92,29 @@ const App: React.FC = () => {
     }
   };
 
+  const handleHeaderSave = () => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const suggestion = `Stand ${day}.${month}.${year} ${hours}:${minutes}`;
+    const versionName = window.prompt('Name für den Speicherstand eingeben:', suggestion);
+    if (!versionName || !versionName.trim()) return;
+    saveVersion(versionName.trim());
+  };
+
+  const handleHeaderLoadVersion = (versionId: string) => {
+    setSelectedHeaderVersionId(versionId);
+    if (!versionId) return;
+    const selected = savedVersions.find((v) => v.id === versionId);
+    if (selected) {
+      loadVersion(selected);
+    }
+    setSelectedHeaderVersionId('');
+  };
+
   const resetToDefaults = () => {
     if (window.confirm('ACHTUNG: Alle gespeicherten Versionen werden gelöscht und die Standard-Vorlagen neu geladen! Fortfahren?')) {
       localStorage.removeItem('cv-master-versions');
@@ -142,8 +140,48 @@ const App: React.FC = () => {
         setHasLoadedData(true);
         return;
       }
-      const parsed = JSON.parse(raw) as ResumeData;
-      const merged = { ...INITIAL_DATA, ...parsed };
+      const parsed = JSON.parse(raw) as Partial<ResumeData>;
+      const legacyAddress = (parsed.personalInfo as any)?.address as string | undefined;
+      let legacyStreet = '';
+      let legacyZip = '';
+      let legacyCity = '';
+      if (legacyAddress && !parsed.personalInfo?.street && !parsed.personalInfo?.zip && !parsed.personalInfo?.city) {
+        const commaIdx = legacyAddress.lastIndexOf(',');
+        if (commaIdx !== -1) {
+          legacyStreet = legacyAddress.substring(0, commaIdx).trim();
+          const rest = legacyAddress.substring(commaIdx + 1).trim();
+          const spaceIdx = rest.indexOf(' ');
+          if (spaceIdx !== -1) {
+            legacyZip = rest.substring(0, spaceIdx).trim();
+            legacyCity = rest.substring(spaceIdx + 1).trim();
+          } else {
+            legacyCity = rest;
+          }
+        } else {
+          legacyCity = legacyAddress;
+        }
+      }
+      const merged: ResumeData = {
+        ...INITIAL_DATA,
+        personalInfo: {
+          ...INITIAL_DATA.personalInfo,
+          fullName: parsed.personalInfo?.fullName ?? INITIAL_DATA.personalInfo.fullName,
+          jobTitle: parsed.personalInfo?.jobTitle ?? INITIAL_DATA.personalInfo.jobTitle,
+          email: parsed.personalInfo?.email ?? INITIAL_DATA.personalInfo.email,
+          phone: parsed.personalInfo?.phone ?? INITIAL_DATA.personalInfo.phone,
+          street: parsed.personalInfo?.street ?? legacyStreet ?? INITIAL_DATA.personalInfo.street,
+          zip: parsed.personalInfo?.zip ?? legacyZip ?? INITIAL_DATA.personalInfo.zip,
+          city: parsed.personalInfo?.city ?? legacyCity ?? INITIAL_DATA.personalInfo.city,
+          photo: parsed.personalInfo?.photo ?? INITIAL_DATA.personalInfo.photo
+        },
+        coverLetter: {
+          ...INITIAL_DATA.coverLetter,
+          recipient: parsed.coverLetter?.recipient ?? INITIAL_DATA.coverLetter.recipient,
+          subject: parsed.coverLetter?.subject ?? INITIAL_DATA.coverLetter.subject,
+          date: parsed.coverLetter?.date ?? INITIAL_DATA.coverLetter.date,
+          text: parsed.coverLetter?.text ?? INITIAL_DATA.coverLetter.text
+        }
+      };
       const edvSkillIndex = merged.skills?.findIndex((s) => /edv|word|excel/i.test(s.name)) ?? -1;
       if (edvSkillIndex >= 0) {
         const [edvSkill] = merged.skills.splice(edvSkillIndex, 1);
@@ -171,28 +209,6 @@ const App: React.FC = () => {
           level: 3
         })) as any;
       }
-      // Migration: altes address-Feld auf street/zip/city aufteilen
-      const pi = merged.personalInfo as any;
-      if (pi.address && !pi.street && !pi.zip && !pi.city) {
-        const addr: string = pi.address;
-        const commaIdx = addr.lastIndexOf(',');
-        if (commaIdx !== -1) {
-          pi.street = addr.substring(0, commaIdx).trim();
-          const rest = addr.substring(commaIdx + 1).trim();
-          const spaceIdx = rest.indexOf(' ');
-          if (spaceIdx !== -1) {
-            pi.zip = rest.substring(0, spaceIdx).trim();
-            pi.city = rest.substring(spaceIdx + 1).trim();
-          } else {
-            pi.city = rest;
-          }
-        } else {
-          pi.city = addr;
-        }
-        delete pi.address;
-        merged.personalInfo = pi;
-      }
-
       if (!merged.coverLetter?.date) {
         merged.coverLetter = { ...merged.coverLetter, date: today };
       }
@@ -202,10 +218,6 @@ const App: React.FC = () => {
       console.warn('Konnte gespeicherte Daten nicht laden:', error);
       setHasLoadedData(true);
     }
-  }, []);
-
-  useEffect(() => {
-    setShowTutorial(true);
   }, []);
 
   useEffect(() => {
@@ -220,120 +232,6 @@ const App: React.FC = () => {
       }));
     }
   }, [data.coverLetter.date]);
-
-  const tutorialSteps = [
-    { key: 'versions', selector: '[data-tour="versionSection"]', title: 'Versionen verwalten', body: 'Hier kannst du verschiedene Bewerbungsversionen speichern und laden.', input: 'none' },
-    { key: 'personalInfo', selector: '[data-tour="personalInfoSection"]', title: 'Persönliche Daten', body: 'Hier trägst du die Basisdaten ein. Foto kannst du oben links hochladen.', input: 'none' },
-    { key: 'summary', selector: '[data-tour="summarySection"]', title: 'Kurzprofil', body: 'Fasse deine Erfahrung in wenigen Sätzen zusammen.', input: 'none' },
-    { key: 'coverLetter', selector: '[data-tour="coverLetterSection"]', title: 'Anschreiben', body: 'Pflege Empfänger, Datum und Text. Das Datum ist editierbar.', input: 'none' },
-    { key: 'experiences', selector: '[data-tour="experiencesSection"]', title: 'Berufserfahrung', body: 'Mit dem + fügst du eine neue Station hinzu. Bestehende Einträge kannst du jederzeit ändern.', input: 'none' },
-    { key: 'education', selector: '[data-tour="educationSection"]', title: 'Ausbildung', body: 'Auch hier kannst du mit + weitere Einträge hinzufügen.', input: 'none' },
-    { key: 'skills', selector: '[data-tour="skillsSection"]', title: 'Kompetenzen', body: 'Mit + ergänzt du Kompetenzen. Den Level stellst du rechts am Regler ein.', input: 'none' },
-    { key: 'strengths', selector: '[data-tour="strengthsSection"]', title: 'Stärken', body: 'Trage hier deine persönlichen Stärken ein (eine pro Zeile).', input: 'none' },
-    { key: 'additionalSkills', selector: '[data-tour="additionalSkillsSection"]', title: 'Zusatzkenntnisse', body: 'Mit + fügst du weitere Kenntnisse hinzu.', input: 'none' },
-    { key: 'languages', selector: '[data-tour="languagesSection"]', title: 'Sprachen', body: 'Mit + fügst du Sprachen hinzu. Das Niveau wählst du im Dropdown.', input: 'none' },
-    { key: 'layout', selector: '[data-tour="layoutSection"]', title: 'Layout wählen', body: 'Wähle ein Layout für deine Unterlagen.', input: 'none' },
-    { key: 'font', selector: '[data-tour="fontSection"]', title: 'Schriftart wählen', body: 'Wähle eine Schriftart für den Look.', input: 'none' },
-    { key: 'theme', selector: '[data-tour="themeSection"]', title: 'Farbschema wählen', body: 'Wähle ein Farbschema für den Stil.', input: 'none' },
-    { key: 'tutorialButton', selector: '[data-tour="tutorialButton"]', title: 'Tutorial starten', body: 'Mit diesem Button kannst du das Tutorial jederzeit erneut starten.', input: 'none' },
-    { key: 'downloads', selector: '[data-tour="downloadSection"]', title: 'Download', body: 'Hier lädst du einzelne PDFs oder alles zusammen herunter.', input: 'none' }
-  ];
-
-  const getTotalSteps = () => {
-    if (typeof document === 'undefined') return tutorialSteps.length;
-    return tutorialSteps.filter((step) => !step.selector || document.querySelector(step.selector)).length;
-  };
-
-  const handleCloseTutorial = () => {
-    setShowTutorial(false);
-    setShowTutorialIntro(false);
-  };
-
-  const handleStartTutorial = () => {
-    setShowTutorialIntro(false);
-    setShowTutorial(true);
-    setTutorialStep(0);
-  };
-
-  const handleRestartTutorial = () => {
-    setTutorialStep(0);
-    setShowTutorial(true);
-  };
-
-  const findNextStep = (startIndex: number, direction: 1 | -1) => {
-    if (typeof document === 'undefined') return -1;
-    let idx = startIndex;
-    while (idx >= 0 && idx < tutorialSteps.length) {
-      const selector = tutorialSteps[idx].selector;
-      if (selector && document.querySelector(selector)) {
-        return idx;
-      }
-      idx += direction;
-    }
-    return -1;
-  };
-
-
-  const handleNextTutorial = () => {
-    const nextIndex = findNextStep(tutorialStep + 1, 1);
-    if (nextIndex === -1) {
-      handleCloseTutorial();
-      return;
-    }
-    setTutorialStep(nextIndex);
-  };
-
-  const handlePrevTutorial = () => {
-    const prevIndex = findNextStep(tutorialStep - 1, -1);
-    if (prevIndex !== -1) {
-      setTutorialStep(prevIndex);
-    }
-  };
-
-  useEffect(() => {
-    if (!showTutorial || showTutorialIntro || !hasMounted) return;
-    const selector = tutorialSteps[tutorialStep]?.selector;
-    if (!selector) return;
-    const element = document.querySelector(selector) as HTMLElement | null;
-    if (!element) {
-      const nextIndex = findNextStep(tutorialStep + 1, 1);
-      if (nextIndex === -1) {
-        handleCloseTutorial();
-      } else {
-        setTutorialStep(nextIndex);
-      }
-      return;
-    }
-
-    if (activeTourElementRef.current && activeTourElementRef.current !== element) {
-      activeTourElementRef.current.classList.remove('tour-active');
-    }
-    element.classList.add('tour-active');
-    activeTourElementRef.current = element;
-
-    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    const updateRect = () => {
-      const rect = element.getBoundingClientRect();
-      setTutorialRect({
-        top: rect.top + window.scrollY,
-        left: rect.left + window.scrollX,
-        width: rect.width,
-        height: rect.height
-      });
-    };
-
-    updateRect();
-    window.addEventListener('resize', updateRect);
-    window.addEventListener('scroll', updateRect, true);
-    return () => {
-      if (activeTourElementRef.current) {
-        activeTourElementRef.current.classList.remove('tour-active');
-        activeTourElementRef.current = null;
-      }
-      window.removeEventListener('resize', updateRect);
-      window.removeEventListener('scroll', updateRect, true);
-    };
-  }, [showTutorial, showTutorialIntro, tutorialStep, hasMounted]);
 
   useEffect(() => {
     if (!hasLoadedData) return;
@@ -410,44 +308,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col bg-slate-50 ${showTutorial && !showTutorialIntro ? 'tutorial-active' : ''}`}>
-      {showTutorialIntro && hasMounted && (
-        <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Tutorial</p>
-                <h2 className="text-xl font-black text-slate-900 mt-1">Willkommen</h2>
-              </div>
-              <button
-                onClick={handleCloseTutorial}
-                className="text-slate-400 hover:text-slate-600 text-sm"
-                aria-label="Tutorial schließen"
-              >
-                ✕
-              </button>
-            </div>
-            <p className="text-sm text-slate-600 mt-4 leading-relaxed">
-              Dieses Tutorial zeigt dir kurz den Aufbau des Editors, damit du schnell deinen Lebenslauf erstellen kannst.
-              Du kannst es jederzeit beenden.
-            </p>
-            <div className="flex items-center justify-between mt-6">
-              <button
-                onClick={handleCloseTutorial}
-                className="text-xs font-bold text-slate-500 hover:text-slate-700"
-              >
-                Tutorial beenden
-              </button>
-              <button
-                onClick={handleStartTutorial}
-                className="px-3 py-2 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700"
-              >
-                Tutorial starten
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+    <div className="min-h-screen flex flex-col bg-slate-50">
       <header className="bg-white border-b px-6 py-4 flex items-center justify-between sticky top-0 z-[9999]">
         <div className="flex items-center gap-2">
           <div className="bg-blue-600 p-2 rounded-lg">
@@ -477,7 +338,30 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex gap-2 items-center">
-            <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm" data-tour="downloadSection">
+            <button
+              onClick={handleHeaderSave}
+              className="px-3 py-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold flex items-center gap-2"
+              title="Aktuellen Stand speichern"
+            >
+              <Save size={14} />
+              <span className="hidden lg:inline">Speichern</span>
+            </button>
+
+            <select
+              value={selectedHeaderVersionId}
+              onChange={(e) => handleHeaderLoadVersion(e.target.value)}
+              className="px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[220px]"
+              title="Gespeicherte Version laden"
+            >
+              <option value="">Version laden...</option>
+              {savedVersions.map((version) => (
+                <option key={version.id} value={version.id}>
+                  {version.name}
+                </option>
+              ))}
+            </select>
+
+            <div className="flex bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
               <button 
                 onClick={handleDownloadDeckblatt}
                 disabled={isExporting}
@@ -497,53 +381,6 @@ const App: React.FC = () => {
                 <span className="hidden lg:inline text-xs font-bold text-slate-600">Lebenslauf</span>
               </button>
             </div>
-
-            {showTutorial && !showTutorialIntro && tutorialSteps[tutorialStep]?.key === 'downloads' && (
-              <div className="tutorial-inline max-w-xs">
-                <p className="tutorial-step">Tutorial · Schritt {Math.min(tutorialStep + 1, tutorialSteps.length)}/{getTotalSteps()}</p>
-                <h3 className="tutorial-title">{tutorialSteps[tutorialStep].title}</h3>
-                <p className="tutorial-body">{tutorialSteps[tutorialStep].body}</p>
-                <div className="tutorial-actions">
-                  <button onClick={handleCloseTutorial} className="tutorial-skip">Tutorial beenden</button>
-                  <div className="tutorial-buttons">
-                    <button onClick={handlePrevTutorial} disabled={findNextStep(tutorialStep - 1, -1) === -1} className="tutorial-back">
-                      Zurück
-                    </button>
-                    <button onClick={handleNextTutorial} className="tutorial-next">
-                      {tutorialStep >= tutorialSteps.length - 1 ? 'Fertig' : 'Weiter'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <button
-              onClick={handleRestartTutorial}
-              className="hidden xl:inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold border border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-50"
-              title="Tutorial starten"
-              data-tour="tutorialButton"
-            >
-              Tutorial
-            </button>
-
-            {showTutorial && !showTutorialIntro && tutorialSteps[tutorialStep]?.key === 'tutorialButton' && (
-              <div className="tutorial-inline max-w-xs">
-                <p className="tutorial-step">Tutorial · Schritt {Math.min(tutorialStep + 1, tutorialSteps.length)}/{getTotalSteps()}</p>
-                <h3 className="tutorial-title">{tutorialSteps[tutorialStep].title}</h3>
-                <p className="tutorial-body">{tutorialSteps[tutorialStep].body}</p>
-                <div className="tutorial-actions">
-                  <button onClick={handleCloseTutorial} className="tutorial-skip">Tutorial beenden</button>
-                  <div className="tutorial-buttons">
-                    <button onClick={handlePrevTutorial} disabled={findNextStep(tutorialStep - 1, -1) === -1} className="tutorial-back">
-                      Zurück
-                    </button>
-                    <button onClick={handleNextTutorial} className="tutorial-next">
-                      {tutorialStep >= tutorialSteps.length - 1 ? 'Fertig' : 'Weiter'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
 
             <button 
               onClick={handleDownloadAll}
@@ -572,22 +409,6 @@ const App: React.FC = () => {
               onLoadVersion={loadVersion}
               onDeleteVersion={deleteVersion}
               onReset={resetToDefaults}
-              tutorial={
-                showTutorial && !showTutorialIntro
-                  ? {
-                      activeKey: tutorialSteps[tutorialStep]?.key,
-                      title: tutorialSteps[tutorialStep]?.title || '',
-                      body: tutorialSteps[tutorialStep]?.body || '',
-                      step: Math.min(tutorialStep + 1, tutorialSteps.length),
-                      total: getTotalSteps(),
-                      onPrev: handlePrevTutorial,
-                      onNext: handleNextTutorial,
-                      onSkip: handleCloseTutorial,
-                      canPrev: findNextStep(tutorialStep - 1, -1) !== -1,
-                      isLast: tutorialStep >= tutorialSteps.length - 1
-                    }
-                  : undefined
-              }
             />
           </div>
         </div>
@@ -621,44 +442,6 @@ const App: React.FC = () => {
           Vorschau
         </button>
       </div>
-
-      {showTutorialIntro && hasMounted && (
-        <div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Tutorial</p>
-                <h2 className="text-xl font-black text-slate-900 mt-1">Willkommen</h2>
-              </div>
-              <button
-                onClick={handleCloseTutorial}
-                className="text-slate-400 hover:text-slate-600 text-sm"
-                aria-label="Tutorial schließen"
-              >
-                ✕
-              </button>
-            </div>
-            <p className="text-sm text-slate-600 mt-4 leading-relaxed">
-              Dieses Tutorial zeigt dir kurz den Aufbau des Editors, damit du schnell deinen Lebenslauf erstellen kannst.
-              Du kannst es jederzeit beenden.
-            </p>
-            <div className="flex items-center justify-between mt-6">
-              <button
-                onClick={handleCloseTutorial}
-                className="text-xs font-bold text-slate-500 hover:text-slate-700"
-              >
-                Tutorial beenden
-              </button>
-              <button
-                onClick={handleStartTutorial}
-                className="px-3 py-2 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700"
-              >
-                Tutorial starten
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

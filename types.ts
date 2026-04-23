@@ -147,29 +147,100 @@ export const INITIAL_DATA: ResumeData = {
   selectedLayoutId: 'modern',
   selectedFontId: 'sans',
   personalInfo: {
-    fullName: "",
-    jobTitle: "",
-    email: "",
-    phone: "",
-    street: "",
-    zip: "",
-    city: "",
+    fullName: "Erik von Brandt",
+    jobTitle: "Sozial- und Kulturpädagoge",
+    email: "erikvonbrandt@gmail.com",
+    phone: "09542 4520366",
+    street: "Pfarrer-Kropfeld-Straße 27",
+    zip: "96110",
+    city: "Scheßlitz",
     website: "",
     photo: "",
-    summary: ""
+    summary: "Sozial- und kulturpädagogisch ausgebildet mit über 25 Jahren Berufserfahrung in der kreativen Bildungsarbeit, Seminarleitung und projektbezogenen Arbeit mit Kindern, Jugendlichen und Erwachsenen. Langjährige selbstständige Tätigkeit an der Schnittstelle von Kunst, Handwerk, Denkmalpflege und Pädagogik. Erfahren in der Konzeption und Durchführung von praxisnahen, handlungsorientierten Bildungs- und Kulturprojekten in Schulen, Kindergärten, Jugendhilfe, Erwachsenenbildung sowie im musealen und öffentlichen Raum. Ausgeprägte Fähigkeit zur Anleitung von Gruppen, zur individuellen Begleitung sowie zur Vermittlung komplexer Inhalte über kreative und niedrigschwellige Methoden. Derzeit auf der Suche nach einer Teilzeitanstellung im sozial- oder kulturpädagogischen Bereich, mit Fokus auf strukturierte, nachhaltige Arbeitsfelder und klare Rahmenbedingungen."
   },
   coverLetter: {
-    recipient: "",
-    subject: "",
-    date: new Date().toLocaleDateString('de-DE'),
-    text: ""
+    recipient: "Schulhaus Holding GmbH\nz. Hd. Herrn Ponner\nIn der Büg 5\n91330 Eggolsheim",
+    subject: "Bewerbung als Sozialpädagoge - pädagogischer Mitarbeiter an der Graf Staufenberg Schule in Bamberg und an der Mittelschule in Scheßlitz",
+    date: "22.04.2026",
+    text: "Sehr geehrter Herr Ponner,\n\nmit großer Motivation bewerbe ich mich auf Ihre ausgeschriebene Teilzeitstelle-n zur pädagogischen Mitarbeit in Bamberg an der Graf Staufenberg Schule und in Scheßlitz an der Mittelschule.\n\nMeine langjährige selbstständige Tätigkeit hat mir einen praxisnahen, strukturierten und verantwortungsbewussten Arbeitsstil vermittelt. Dabei ist mir eine handlungsorientierte, niedrigschwellige Vermittlung wichtig, die Menschen erreicht und individuell fördert. Gruppen anzuleiten, Prozesse zu strukturieren und komplexe Inhalte verständlich aufzubereiten gehört zu meinen zentralen Stärken.\n\nPersönlich habe ich schon längerfristig im Ganztagsbereich, z.B. fünf Jahre am Erlangener EMN-Gym gearbeitet und auch für das KS:BAM verschiedene Kreativseminare an verschiedenen Schulen im Bamberger Raum durchgeführt. Somit könnte ich mit gut eine interessante Zusammenarbeit mt Ihren Teams vorstellen.\n\nIch suche ein klares, verlässliches Arbeitsumfeld mit nachhaltigen Aufgaben, in dem ich meine Erfahrung und pädagogische Haltung langfristig einbringen kann. An weiterer Bildung oder vertiefter Einarbeitung in spezielle Themenbereiche bin ich immer interessiert.\n\nÜber die Möglichkeit eines persönlichen Kennenlernens freue ich mich sehr.\n\nMit freundlichen Grüßen\nErik von Brandt"
   },
-  experiences: [],
-  education: [],
-  skills: [],
-  languages: [],
-  strengths: [],
-  additionalSkills: []
+  experiences: [
+    {
+      id: "1",
+      company: "Selbstständige künstlerische Tätigkeit",
+      position: "Künstler, Bildhauer & kulturpädagogischer Referent",
+      period: "Seit 1997",
+      description: "- Planung und Durchführung von Kunst-, Werk- und Naturprojekten\n- Seminare, Fortbildungen und Workshops\n- Künstlerische und kunsthandwerkliche Aufträge\n- Restaurierungsarbeiten an denkmalgeschützten Objekten"
+    },
+    {
+      id: "2",
+      company: "Kirchliche, öffentliche & historische Bauwerke",
+      position: "Steinmetzgeselle / Restaurator",
+      period: "1991 - 1997",
+      description: "- Mitarbeit an kirchlichen, öffentlichen und historischen Bauwerken"
+    }
+  ],
+  education: [
+    {
+      id: "1",
+      school: "Otto-Friedrich-Universität Bamberg",
+      degree: "Diplom-Sozialpädagoge (FH)",
+      period: "1992-1997"
+    },
+    {
+      id: "2",
+      school: "Städtische Meisterschule München",
+      degree: "Ausbildung: Steinmetz und Steinbildhauer",
+      period: "1988 - 1991"
+    },
+    {
+      id: "3",
+      school: "Otto-Friedrich-Universität Bamberg",
+      degree: "Studium: Denkmalpflege (2 Semester)",
+      period: "1997-1998"
+    },
+    {
+      id: "4",
+      school: "Otto-Friedrich-Universität Bamberg",
+      degree: "Studium: Didaktik der Kunst (2 Semester)",
+      period: "2009-2010"
+    },
+    {
+      id: "5",
+      school: "ASB",
+      degree: "Zivildienst: Individuelle Schwerbehindertenbetreuung",
+      period: ""
+    }
+  ],
+  skills: [
+    { id: "s1", name: "Sozial- & Kulturpädagogik", level: 5 },
+    { id: "s2", name: "Künstlerische Bildungsarbeit", level: 5 },
+    { id: "s3", name: "Seminar-, Kurs- & Workshopleitung", level: 5 },
+    { id: "s4", name: "Projektarbeit (Schulen, Kitas, Jugendhilfe)", level: 5 },
+    { id: "s5", name: "Werken, Plastik & Bildhauerei", level: 5 },
+    { id: "s6", name: "Gruppenleitung & individuelle Förderung", level: 5 }
+  ],
+  languages: [
+    { id: "l1", name: "Deutsch", level: 5 },
+    { id: "l2", name: "Englisch", level: 2 },
+    { id: "l3", name: "Französisch", level: 1 },
+    { id: "l4", name: "Latein", level: 1 }
+  ],
+  strengths: [
+    "ressourcen- und prozessorientiert",
+    "empathisch, strukturiert und verantwortungsbewusst",
+    "kreativ, handlungsorientiert und praxisnah",
+    "hohe Selbstständigkeit und Zuverlässigkeit"
+  ],
+  additionalSkills: [
+    { id: "a1", name: "Seminar- & Gruppenarbeit" },
+    { id: "a2", name: "Denkmal- und Steinrestaurierung" },
+    { id: "a3", name: "Material- und Werktechniken (Stein, Ton, Gips, Holz, Metall)" },
+    { id: "a4", name: "Kreative Methoden & Naturpädagogik" },
+    { id: "a5", name: "EDV: Word, Excel (Grundlagen), Photoshop" },
+    { id: "a6", name: "Atemtechnik, Meditation" },
+    { id: "a7", name: "Musikpädagogik-afrikanische Percussion" }
+  ]
 };
 
     // Added missing properties to INITIAL_DATA to match ResumeData interface
@@ -253,7 +324,7 @@ export const PAEDAGOGE_DATA: ResumeData = {
   selectedFontId: 'sans',
   personalInfo: {
     fullName: "Erik von Brandt",
-    jobTitle: "Sozial- und Kulturpädagoge / Künstler",
+    jobTitle: "Sozial- und Kulturpädagoge",
     email: "erikvonbrandt@gmail.com",
     phone: "09542 4520366",
     street: "Pfarrer-Kropfeld-Straße 27",
@@ -261,60 +332,91 @@ export const PAEDAGOGE_DATA: ResumeData = {
     city: "Scheßlitz",
     website: "",
     photo: "",
-    summary: "Sozial- und kulturpädagogisch ausgebildeter Künstler und Bildhauer mit über 25 Jahren Berufserfahrung in der kreativen Bildungsarbeit, Seminarleitung und projektbezogenen Arbeit mit Kindern, Jugendlichen und Erwachsenen. Langjährige selbstständige Tätigkeit an der Schnittstelle von Kunst, Handwerk, Denkmalpflege und Pädagogik. Erfahren in der Konzeption und Durchführung von praxisnahen, handlungsorientierten Bildungs- und Kulturprojekten in Schulen, Kindergärten, Jugendhilfe, Erwachsenenbildung sowie im musealen und öffentlichen Raum. Ausgeprägte Fähigkeit zur Anleitung von Gruppen, zur individuellen Begleitung sowie zur Vermittlung komplexer Inhalte über kreative und niedrigschwellige Methoden."
+    summary: "Sozial- und kulturpädagogisch ausgebildet mit über 25 Jahren Berufserfahrung in der kreativen Bildungsarbeit, Seminarleitung und projektbezogenen Arbeit mit Kindern, Jugendlichen und Erwachsenen. Langjährige selbstständige Tätigkeit an der Schnittstelle von Kunst, Handwerk, Denkmalpflege und Pädagogik. Erfahren in der Konzeption und Durchführung von praxisnahen, handlungsorientierten Bildungs- und Kulturprojekten in Schulen, Kindergärten, Jugendhilfe, Erwachsenenbildung sowie im musealen und öffentlichen Raum. Ausgeprägte Fähigkeit zur Anleitung von Gruppen, zur individuellen Begleitung sowie zur Vermittlung komplexer Inhalte über kreative und niedrigschwellige Methoden. Derzeit auf der Suche nach einer Teilzeitanstellung im sozial- oder kulturpädagogischen Bereich, mit Fokus auf strukturierte, nachhaltige Arbeitsfelder und klare Rahmenbedingungen."
   },
   coverLetter: {
-    recipient: "An die Hausverwaltung / Personalabteilung\nAnsprechpartner bekannt / Unbekannt\nMusterstraße 123\n96047 Bamberg",
-    subject: "Bewerbung als Sozial- und Kulturpädagoge",
-    date: new Date().toLocaleDateString('de-DE'),
-    text: "Sehr geehrte Damen und Herren,\n\nmit großer Motivation bewerbe ich mich auf eine Teilzeitstelle im sozial- oder kulturpädagogischen Bereich. Als sozial- und kulturpädagogisch ausgebildeter Künstler und Bildhauer bringe ich über 25 Jahre Berufserfahrung in der kreativen Bildungsarbeit, Seminarleitung und projektbezogenen Arbeit mit Kindern, Jugendlichen und Erwachsenen mit.\n\nMeine langjährige selbstständige Tätigkeit an der Schnittstelle von Kunst, Handwerk, Denkmalpflege und Pädagogik hat mir einen praxisnahen, strukturierten und verantwortungsbewussten Arbeitsstil vermittelt.\n\nIch konzipiere und realisiere Bildungs- und Kulturprojekte in Schulen, Kindergärten, der Jugendhilfe, der Erwachsenenbildung sowie im musealen und öffentlichen Raum. Dabei ist mir eine handlungsorientierte, niedrigschwellige Vermittlung wichtig, die Menschen erreicht und individuell fördert. Gruppen anzuleiten, Prozesse zu strukturieren und komplexe Inhalte verständlich aufzubereiten gehört zu meinen zentralen Stärken.\n\nIch suche ein klares, verlässliches Arbeitsumfeld mit nachhaltigen Aufgaben, in dem ich meine Erfahrung und pädagogische Haltung langfristig einbringen kann. Über die Möglichkeit eines persönlichen Kennenlernens freue ich mich sehr.\n\nMit freundlichen Grüßen\nErik von Brandt"
+    recipient: "Schulhaus Holding GmbH\nz. Hd. Herrn Ponner\nIn der Büg 5\n91330 Eggolsheim",
+    subject: "Bewerbung als Sozialpädagoge - pädagogischer Mitarbeiter an der Graf Staufenberg Schule in Bamberg und an der Mittelschule in Scheßlitz",
+    date: "22.04.2026",
+    text: "Sehr geehrter Herr Ponner,\n\nmit großer Motivation bewerbe ich mich auf Ihre ausgeschriebene Teilzeitstelle-n zur pädagogischen Mitarbeit in Bamberg an der Graf Staufenberg Schule und in Scheßlitz an der Mittelschule.\n\nMeine langjährige selbstständige Tätigkeit hat mir einen praxisnahen, strukturierten und verantwortungsbewussten Arbeitsstil vermittelt. Dabei ist mir eine handlungsorientierte, niedrigschwellige Vermittlung wichtig, die Menschen erreicht und individuell fördert. Gruppen anzuleiten, Prozesse zu strukturieren und komplexe Inhalte verständlich aufzubereiten gehört zu meinen zentralen Stärken.\n\nPersönlich habe ich schon längerfristig im Ganztagsbereich, z.B. fünf Jahre am Erlangener EMN-Gym gearbeitet und auch für das KS:BAM verschiedene Kreativseminare an verschiedenen Schulen im Bamberger Raum durchgeführt. Somit könnte ich mit gut eine interessante Zusammenarbeit mt Ihren Teams vorstellen.\n\nIch suche ein klares, verlässliches Arbeitsumfeld mit nachhaltigen Aufgaben, in dem ich meine Erfahrung und pädagogische Haltung langfristig einbringen kann. An weiterer Bildung oder vertiefter Einarbeitung in spezielle Themenbereiche bin ich immer interessiert.\n\nÜber die Möglichkeit eines persönlichen Kennenlernens freue ich mich sehr.\n\nMit freundlichen Grüßen\nErik von Brandt"
   },
   experiences: [
     {
-       id: "1",
-       company: "Selbstständige künstlerische Tätigkeit",
-       position: "Künstler, Bildhauer & Referent",
-       period: "Seit 1997",
-       description: "Planung und Durchführung von Kunst-, Werk- und Naturprojekten - Seminare, Fortbildungen und Workshops - Künstlerische und kunsthandwerkliche Aufträge - Restaurierungsarbeiten an denkmalgeschützten Objekten"
+      id: "1",
+      company: "Selbstständige künstlerische Tätigkeit",
+      position: "Künstler, Bildhauer & kulturpädagogischer Referent",
+      period: "Seit 1997",
+      description: "- Planung und Durchführung von Kunst-, Werk- und Naturprojekten\n- Seminare, Fortbildungen und Workshops\n- Künstlerische und kunsthandwerkliche Aufträge\n- Restaurierungsarbeiten an denkmalgeschützten Objekten"
     },
     {
-       id: "2",
-       company: "Kirchliche, öffentliche & historische Bauwerke",
-       position: "Steinmetzgeselle / Restaurator",
-       period: "1991 - 1997",
-       description: "Mitarbeit an kirchlichen, öffentlichen und historischen Bauwerken"
+      id: "2",
+      company: "Kirchliche, öffentliche & historische Bauwerke",
+      position: "Steinmetzgeselle / Restaurator",
+      period: "1991 - 1997",
+      description: "- Mitarbeit an kirchlichen, öffentlichen und historischen Bauwerken"
     }
   ],
   education: [
-     {
-        id: "1",
-        school: "Fachhochschule",
-        degree: "Diplom-Sozialpädagoge (FH)",
-        period: ""
-     },
-     {
-        id: "2",
-        school: "Städtische Meisterschule München",
-        degree: "Ausbildung: Steinmetz und Steinbildhauer",
-        period: "1988 - 1991"
-     }
+    {
+      id: "1",
+      school: "Otto-Friedrich-Universität Bamberg",
+      degree: "Diplom-Sozialpädagoge (FH)",
+      period: "1992-1997"
+    },
+    {
+      id: "2",
+      school: "Städtische Meisterschule München",
+      degree: "Ausbildung: Steinmetz und Steinbildhauer",
+      period: "1988 - 1991"
+    },
+    {
+      id: "3",
+      school: "Otto-Friedrich-Universität Bamberg",
+      degree: "Studium: Denkmalpflege (2 Semester)",
+      period: "1997-1998"
+    },
+    {
+      id: "4",
+      school: "Otto-Friedrich-Universität Bamberg",
+      degree: "Studium: Didaktik der Kunst (2 Semester)",
+      period: "2009-2010"
+    },
+    {
+      id: "5",
+      school: "ASB",
+      degree: "Zivildienst: Individuelle Schwerbehindertenbetreuung",
+      period: ""
+    }
   ],
   skills: [
     { id: "s1", name: "Sozial- & Kulturpädagogik", level: 5 },
     { id: "s2", name: "Künstlerische Bildungsarbeit", level: 5 },
     { id: "s3", name: "Seminar-, Kurs- & Workshopleitung", level: 5 },
-    { id: "s4", name: "Projektarbeit", level: 5 },
-    { id: "s5", name: "Gruppenleitung & Indiv. Förderung", level: 5 },
-    { id: "s6", name: "Werken, Plastik & Bildhauerei", level: 4 }
+    { id: "s4", name: "Projektarbeit (Schulen, Kitas, Jugendhilfe)", level: 5 },
+    { id: "s5", name: "Werken, Plastik & Bildhauerei", level: 5 },
+    { id: "s6", name: "Gruppenleitung & individuelle Förderung", level: 5 }
   ],
-   languages: [
-     { id: "l1", name: "Deutsch", level: 5 },
-     { id: "l2", name: "Englisch", level: 2 },
-     { id: "l3", name: "Französisch", level: 1 },
-     { id: "l4", name: "Latein", level: 1 }
+  languages: [
+    { id: "l1", name: "Deutsch", level: 5 },
+    { id: "l2", name: "Englisch", level: 2 },
+    { id: "l3", name: "Französisch", level: 1 },
+    { id: "l4", name: "Latein", level: 1 }
   ],
-  strengths: [],
-  additionalSkills: []
+  strengths: [
+    "ressourcen- und prozessorientiert",
+    "empathisch, strukturiert und verantwortungsbewusst",
+    "kreativ, handlungsorientiert und praxisnah",
+    "hohe Selbstständigkeit und Zuverlässigkeit"
+  ],
+  additionalSkills: [
+    { id: "a1", name: "Seminar- & Gruppenarbeit" },
+    { id: "a2", name: "Denkmal- und Steinrestaurierung" },
+    { id: "a3", name: "Material- und Werktechniken (Stein, Ton, Gips, Holz, Metall)" },
+    { id: "a4", name: "Kreative Methoden & Naturpädagogik" },
+    { id: "a5", name: "EDV: Word, Excel (Grundlagen), Photoshop" },
+    { id: "a6", name: "Atemtechnik, Meditation" },
+    { id: "a7", name: "Musikpädagogik-afrikanische Percussion" }
+  ],
 };
 
 // Old initialization for reference, not used anymore
